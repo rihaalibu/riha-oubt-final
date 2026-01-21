@@ -1,0 +1,485 @@
+{
+ "Resources": {
+  "PipelineStateMachineLogs7B9C1C22": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 7
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "RihaOrchestrationStack/PipelineStateMachineLogs/Resource"
+   }
+  },
+  "RihaOubtPipelineStateMachineRole5B3C5EBF": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "states.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihaOrchestrationStack/RihaOubtPipelineStateMachine/Role/Resource"
+   }
+  },
+  "RihaOubtPipelineStateMachineRoleDefaultPolicyCCF38C6D": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "glue:StartJobRun",
+        "glue:GetJobRun",
+        "glue:GetJobRuns",
+        "glue:BatchStopJobRun"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":glue:us-east-1:",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":job/01_validate_clean"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": [
+        "glue:StartJobRun",
+        "glue:GetJobRun",
+        "glue:GetJobRuns",
+        "glue:BatchStopJobRun"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":glue:us-east-1:",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":job/02_process_trips"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": [
+        "glue:StartJobRun",
+        "glue:GetJobRun",
+        "glue:GetJobRuns",
+        "glue:BatchStopJobRun"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":glue:us-east-1:",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":job/02b_create_golden_zones"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": [
+        "glue:StartJobRun",
+        "glue:GetJobRun",
+        "glue:GetJobRuns",
+        "glue:BatchStopJobRun"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":glue:us-east-1:",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":job/02c_create_golden_vendors"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": [
+        "glue:StartJobRun",
+        "glue:GetJobRun",
+        "glue:GetJobRuns",
+        "glue:BatchStopJobRun"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":glue:us-east-1:",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":job/03_scd2_zones"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": [
+        "glue:StartJobRun",
+        "glue:GetJobRun",
+        "glue:GetJobRuns",
+        "glue:BatchStopJobRun"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":glue:us-east-1:",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":job/03b_scd2_vendors"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": [
+        "glue:StartJobRun",
+        "glue:GetJobRun",
+        "glue:GetJobRuns",
+        "glue:BatchStopJobRun"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":glue:us-east-1:",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":job/04_fact_trips"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": "glue:startCrawler",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": "glue:getCrawler",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "glue:StartJobRun",
+        "glue:GetJobRun",
+        "glue:GetJobRuns",
+        "glue:BatchStopJobRun"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":glue:us-east-1:",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":job/05_redshift_load"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": [
+        "glue:StartJobRun",
+        "glue:GetJobRun",
+        "glue:GetJobRuns",
+        "glue:BatchStopJobRun"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":glue:us-east-1:",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":job/06_governance_metrics"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": [
+        "logs:CreateLogDelivery",
+        "logs:GetLogDelivery",
+        "logs:UpdateLogDelivery",
+        "logs:DeleteLogDelivery",
+        "logs:ListLogDeliveries",
+        "logs:PutResourcePolicy",
+        "logs:DescribeResourcePolicies",
+        "logs:DescribeLogGroups"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "RihaOubtPipelineStateMachineRoleDefaultPolicyCCF38C6D",
+    "Roles": [
+     {
+      "Ref": "RihaOubtPipelineStateMachineRole5B3C5EBF"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihaOrchestrationStack/RihaOubtPipelineStateMachine/Role/DefaultPolicy/Resource"
+   }
+  },
+  "RihaOubtPipelineStateMachine9EF4AEBE": {
+   "Type": "AWS::StepFunctions::StateMachine",
+   "Properties": {
+    "DefinitionString": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"StartAt\":\"Run01validateclean\",\"States\":{\"Run01validateclean\":{\"Next\":\"Run02processtrips\",\"Type\":\"Task\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::glue:startJobRun.sync\",\"Parameters\":{\"JobName\":\"01_validate_clean\",\"Timeout\":120}},\"Run02processtrips\":{\"Next\":\"Run02bcreategoldenzones\",\"Type\":\"Task\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::glue:startJobRun.sync\",\"Parameters\":{\"JobName\":\"02_process_trips\",\"Timeout\":120}},\"Run02bcreategoldenzones\":{\"Next\":\"Run02ccreategoldenvendors\",\"Type\":\"Task\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::glue:startJobRun.sync\",\"Parameters\":{\"JobName\":\"02b_create_golden_zones\",\"Timeout\":120}},\"Run02ccreategoldenvendors\":{\"Next\":\"Run03scd2zones\",\"Type\":\"Task\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::glue:startJobRun.sync\",\"Parameters\":{\"JobName\":\"02c_create_golden_vendors\",\"Timeout\":120}},\"Run03scd2zones\":{\"Next\":\"Run03bscd2vendors\",\"Type\":\"Task\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::glue:startJobRun.sync\",\"Parameters\":{\"JobName\":\"03_scd2_zones\",\"Timeout\":120}},\"Run03bscd2vendors\":{\"Next\":\"Run04facttrips\",\"Type\":\"Task\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::glue:startJobRun.sync\",\"Parameters\":{\"JobName\":\"03b_scd2_vendors\",\"Timeout\":120}},\"Run04facttrips\":{\"Next\":\"StartCuratedCrawler\",\"Type\":\"Task\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::glue:startJobRun.sync\",\"Parameters\":{\"JobName\":\"04_fact_trips\",\"Timeout\":120}},\"StartCuratedCrawler\":{\"Next\":\"WaitBeforePollingCrawler\",\"Type\":\"Task\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::aws-sdk:glue:startCrawler\",\"Parameters\":{\"Name\":\"rihaoubt-curated-crawler\"}},\"WaitBeforePollingCrawler\":{\"Type\":\"Wait\",\"Seconds\":30,\"Next\":\"GetCuratedCrawlerStatus\"},\"GetCuratedCrawlerStatus\":{\"Next\":\"CrawlerFinished?\",\"Type\":\"Task\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::aws-sdk:glue:getCrawler\",\"Parameters\":{\"Name\":\"rihaoubt-curated-crawler\"}},\"CrawlerFinished?\":{\"Type\":\"Choice\",\"Choices\":[{\"Variable\":\"$.Crawler.State\",\"StringEquals\":\"READY\",\"Next\":\"Run05redshiftload\"}],\"Default\":\"WaitBeforePollingCrawler\"},\"Run05redshiftload\":{\"Next\":\"Run06governancemetrics\",\"Type\":\"Task\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::glue:startJobRun.sync\",\"Parameters\":{\"JobName\":\"05_redshift_load\",\"Timeout\":120}},\"Run06governancemetrics\":{\"End\":true,\"Type\":\"Task\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::glue:startJobRun.sync\",\"Parameters\":{\"JobName\":\"06_governance_metrics\",\"Timeout\":120}}},\"TimeoutSeconds\":21600}"
+      ]
+     ]
+    },
+    "LoggingConfiguration": {
+     "Destinations": [
+      {
+       "CloudWatchLogsLogGroup": {
+        "LogGroupArn": {
+         "Fn::GetAtt": [
+          "PipelineStateMachineLogs7B9C1C22",
+          "Arn"
+         ]
+        }
+       }
+      }
+     ],
+     "IncludeExecutionData": true,
+     "Level": "ALL"
+    },
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "RihaOubtPipelineStateMachineRole5B3C5EBF",
+      "Arn"
+     ]
+    }
+   },
+   "DependsOn": [
+    "RihaOubtPipelineStateMachineRoleDefaultPolicyCCF38C6D",
+    "RihaOubtPipelineStateMachineRole5B3C5EBF"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "RihaOrchestrationStack/RihaOubtPipelineStateMachine/Resource"
+   }
+  },
+  "RihaOubtPipelineDashboard": {
+   "Type": "AWS::CloudWatch::Dashboard",
+   "Properties": {
+    "DashboardBody": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"widgets\": [{\"type\": \"metric\", \"x\": 0, \"y\": 0, \"width\": 12, \"height\": 6, \"properties\": {\"title\": \"Pipeline Executions\", \"metrics\": [[\"AWS/States\", \"ExecutionsStarted\", \"StateMachineArn\", \"",
+       {
+        "Ref": "RihaOubtPipelineStateMachine9EF4AEBE"
+       },
+       "\"], [\".\", \"ExecutionsSucceeded\", \".\", \".\"], [\".\", \"ExecutionsFailed\", \".\", \".\"]], \"stat\": \"Sum\", \"period\": 300, \"region\": \"us-east-1\"}}, {\"type\": \"metric\", \"x\": 12, \"y\": 0, \"width\": 12, \"height\": 6, \"properties\": {\"title\": \"Pipeline Duration (p95)\", \"metrics\": [[\"AWS/States\", \"ExecutionTime\", \"StateMachineArn\", \"",
+       {
+        "Ref": "RihaOubtPipelineStateMachine9EF4AEBE"
+       },
+       "\"]], \"stat\": \"p95\", \"period\": 300, \"region\": \"us-east-1\"}}]}"
+      ]
+     ]
+    },
+    "DashboardName": "RihaOrchestrationStack-pipeline-dashboard"
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihaOrchestrationStack/RihaOubtPipelineDashboard"
+   }
+  },
+  "PipelineFailureAlarm20CC1062": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "AlarmDescription": "Riha OUBT pipeline execution failed",
+    "AlarmName": "RihaOrchestrationStack-pipeline-failure",
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "Dimensions": [
+     {
+      "Name": "StateMachineArn",
+      "Value": {
+       "Ref": "RihaOubtPipelineStateMachine9EF4AEBE"
+      }
+     }
+    ],
+    "EvaluationPeriods": 1,
+    "MetricName": "ExecutionsFailed",
+    "Namespace": "AWS/States",
+    "Period": 300,
+    "Statistic": "Sum",
+    "Threshold": 1,
+    "TreatMissingData": "notBreaching"
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihaOrchestrationStack/PipelineFailureAlarm/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WLwWrDMBBEvyV3edukhfYaXAiUFoJ96DGsZTlSLGuDdlUThP692KHQnt4bZmYH25dXeNzgzJXux8q7DnIrqEeFM58yi7kOKWhxFPgkyCNDrtH7/cytid9OG3XwybSCUd6pa1Io6t8J8hc6UbWlZdsKivlEbV0wqh7C31yUpzND/qDzIVK6Lv2vF+VwgtyQX28rj+Sdvi3xbkVpT6mfUbSFXA/hDdl2hLFXe49xWparlKIaw5SiNkUdb2IpPDzB9hl2mws7V8UUxE0Gmjt/AGpNPSEkAQAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihaOrchestrationStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

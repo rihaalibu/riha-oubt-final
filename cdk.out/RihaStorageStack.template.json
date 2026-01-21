@@ -1,0 +1,307 @@
+{
+ "Resources": {
+  "KmsDataKeyCF9D86DB": {
+   "Type": "AWS::KMS::Key",
+   "Properties": {
+    "EnableKeyRotation": true,
+    "KeyPolicy": {
+     "Statement": [
+      {
+       "Action": "kms:*",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":iam::",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":root"
+          ]
+         ]
+        }
+       },
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "kms:Encrypt",
+        "kms:Decrypt",
+        "kms:GenerateDataKey*",
+        "kms:DescribeKey"
+       ],
+       "Effect": "Allow",
+       "Principal": {
+        "Service": [
+         "redshift.amazonaws.com",
+         "redshift-serverless.amazonaws.com"
+        ]
+       },
+       "Resource": "*",
+       "Sid": "AllowRedshiftUsage"
+      },
+      {
+       "Action": [
+        "kms:Encrypt",
+        "kms:GenerateDataKey*",
+        "kms:DescribeKey"
+       ],
+       "Condition": {
+        "StringEquals": {
+         "aws:SourceAccount": {
+          "Ref": "AWS::AccountId"
+         }
+        }
+       },
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       },
+       "Resource": "*",
+       "Sid": "AllowLambdaS3Deployments"
+      },
+      {
+       "Action": [
+        "kms:Encrypt",
+        "kms:Decrypt",
+        "kms:ReEncrypt*",
+        "kms:GenerateDataKey*",
+        "kms:DescribeKey"
+       ],
+       "Condition": {
+        "StringEquals": {
+         "aws:SourceAccount": {
+          "Ref": "AWS::AccountId"
+         },
+         "kms:ViaService": "s3.us-east-1.amazonaws.com"
+        }
+       },
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "s3.amazonaws.com"
+       },
+       "Resource": "*",
+       "Sid": "AllowS3UseOfKey"
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "RihaStorageStack/Kms/DataKey/Resource"
+   }
+  },
+  "KmsDataKeyAlias4BB86143": {
+   "Type": "AWS::KMS::Alias",
+   "Properties": {
+    "AliasName": "alias/riha-data",
+    "TargetKeyId": {
+     "Fn::GetAtt": [
+      "KmsDataKeyCF9D86DB",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihaStorageStack/Kms/DataKey/Alias/Resource"
+   }
+  },
+  "S3DataLakeE27C7386": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketEncryption": {
+     "ServerSideEncryptionConfiguration": [
+      {
+       "ServerSideEncryptionByDefault": {
+        "KMSMasterKeyID": {
+         "Fn::GetAtt": [
+          "KmsDataKeyCF9D86DB",
+          "Arn"
+         ]
+        },
+        "SSEAlgorithm": "aws:kms"
+       }
+      }
+     ]
+    },
+    "PublicAccessBlockConfiguration": {
+     "BlockPublicAcls": true,
+     "BlockPublicPolicy": true,
+     "IgnorePublicAcls": true,
+     "RestrictPublicBuckets": true
+    },
+    "VersioningConfiguration": {
+     "Status": "Enabled"
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "RihaStorageStack/S3/DataLake/Resource"
+   }
+  },
+  "S3DataLakePolicy0EFEB313": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "S3DataLakeE27C7386"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "s3:*",
+       "Condition": {
+        "Bool": {
+         "aws:SecureTransport": "false"
+        }
+       },
+       "Effect": "Deny",
+       "Principal": {
+        "AWS": "*"
+       },
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "S3DataLakeE27C7386",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "S3DataLakeE27C7386",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihaStorageStack/S3/DataLake/Policy/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/0WISw7CIBBAz9I9jLY10a26dGFTD2AQMSIUTGdIQwh3N4iJq/fpoN3uYN2IBbm8G271DdKFhDRMLHhNZkJIJxXZ8eEK9lYLLPGVzLCHdAjSKCrzZxWDt1rG/66dcznnQO9AbFTowyxVZkOkp3erHtoNdM0LteZzcKQnBWPlB5OfSjmqAAAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihaStorageStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "KmsRihaDataKeyArnB7B9BB66": {
+   "Value": {
+    "Fn::GetAtt": [
+     "KmsDataKeyCF9D86DB",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "RihaDataKeyArn"
+   }
+  },
+  "RihaDataLakeKmsKeyArn": {
+   "Value": {
+    "Fn::GetAtt": [
+     "KmsDataKeyCF9D86DB",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "RihaDataLakeKmsKeyArn:KmsKeyArn"
+   }
+  },
+  "RihaDataLakeBucketName": {
+   "Value": {
+    "Ref": "S3DataLakeE27C7386"
+   },
+   "Export": {
+    "Name": "RihaStorageStack:BucketName"
+   }
+  },
+  "ExportsOutputFnGetAttS3DataLakeE27C7386Arn6E30F4A0": {
+   "Value": {
+    "Fn::GetAtt": [
+     "S3DataLakeE27C7386",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "RihaStorageStack:ExportsOutputFnGetAttS3DataLakeE27C7386Arn6E30F4A0"
+   }
+  },
+  "ExportsOutputFnGetAttKmsDataKeyCF9D86DBArnEB4E544D": {
+   "Value": {
+    "Fn::GetAtt": [
+     "KmsDataKeyCF9D86DB",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "RihaStorageStack:ExportsOutputFnGetAttKmsDataKeyCF9D86DBArnEB4E544D"
+   }
+  },
+  "ExportsOutputRefS3DataLakeE27C73864B4EADC5": {
+   "Value": {
+    "Ref": "S3DataLakeE27C7386"
+   },
+   "Export": {
+    "Name": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,3004 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "RihanaNetworkStack": {
+        "id": "RihanaNetworkStack",
+        "path": "RihanaNetworkStack",
+        "children": {
+          "RihaVpc": {
+            "id": "RihaVpc",
+            "path": "RihanaNetworkStack/RihaVpc",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "RihanaNetworkStack/RihaVpc/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::EC2::VPC",
+                  "aws:cdk:cloudformation:props": {
+                    "cidrBlock": "10.0.0.0/16",
+                    "enableDnsHostnames": true,
+                    "enableDnsSupport": true,
+                    "instanceTenancy": "default",
+                    "tags": [
+                      {
+                        "key": "Name",
+                        "value": "RihanaNetworkStack/RihaVpc"
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.CfnVPC",
+                  "version": "2.178.0"
+                }
+              },
+              "publicSubnet1": {
+                "id": "publicSubnet1",
+                "path": "RihanaNetworkStack/RihaVpc/publicSubnet1",
+                "children": {
+                  "Subnet": {
+                    "id": "Subnet",
+                    "path": "RihanaNetworkStack/RihaVpc/publicSubnet1/Subnet",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                      "aws:cdk:cloudformation:props": {
+                        "availabilityZone": {
+                          "Fn::Select": [
+                            0,
+                            {
+                              "Fn::GetAZs": ""
+                            }
+                          ]
+                        },
+                        "cidrBlock": "10.0.0.0/18",
+                        "mapPublicIpOnLaunch": true,
+                        "tags": [
+                          {
+                            "key": "aws-cdk:subnet-name",
+                            "value": "public"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-type",
+                            "value": "Public"
+                          },
+                          {
+                            "key": "Name",
+                            "value": "RihanaNetworkStack/RihaVpc/publicSubnet1"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "RihaVpc15A21ED3"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
+                      "version": "2.178.0"
+                    }
+                  },
+                  "Acl": {
+                    "id": "Acl",
+                    "path": "RihanaNetworkStack/RihaVpc/publicSubnet1/Acl",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.178.0",
+                      "metadata": []
+                    }
+                  },
+                  "RouteTable": {
+                    "id": "RouteTable",
+                    "path": "RihanaNetworkStack/RihaVpc/publicSubnet1/RouteTable",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:props": {
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "RihanaNetworkStack/RihaVpc/publicSubnet1"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "RihaVpc15A21ED3"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
+                      "version": "2.178.0"
+                    }
+                  },
+                  "RouteTableAssociation": {
+                    "id": "RouteTableAssociation",
+                    "path": "RihanaNetworkStack/RihaVpc/publicSubnet1/RouteTableAssociation",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "RihaVpcpublicSubnet1RouteTable93BD0E16"
+                        },
+                        "subnetId": {
+                          "Ref": "RihaVpcpublicSubnet1Subnet6A70FFE3"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                      "version": "2.178.0"
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "RihanaNetworkStack/RihaVpc/publicSubnet1/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "gatewayId": {
+                          "Ref": "RihaVpcIGW9527F9D4"
+                        },
+                        "routeTableId": {
+                          "Ref": "RihaVpcpublicSubnet1RouteTable93BD0E16"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
+                      "version": "2.178.0"
+                    }
+                  },
+                  "EIP": {
+                    "id": "EIP",
+                    "path": "RihanaNetworkStack/RihaVpc/publicSubnet1/EIP",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::EIP",
+                      "aws:cdk:cloudformation:props": {
+                        "domain": "vpc",
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "RihanaNetworkStack/RihaVpc/publicSubnet1"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnEIP",
+                      "version": "2.178.0"
+                    }
+                  },
+                  "NATGateway": {
+                    "id": "NATGateway",
+                    "path": "RihanaNetworkStack/RihaVpc/publicSubnet1/NATGateway",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::NatGateway",
+                      "aws:cdk:cloudformation:props": {
+                        "allocationId": {
+                          "Fn::GetAtt": [
+                            "RihaVpcpublicSubnet1EIPB515F28C",
+                            "AllocationId"
+                          ]
+                        },
+                        "subnetId": {
+                          "Ref": "RihaVpcpublicSubnet1Subnet6A70FFE3"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "RihanaNetworkStack/RihaVpc/publicSubnet1"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnNatGateway",
+                      "version": "2.178.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.PublicSubnet",
+                  "version": "2.178.0",
+                  "metadata": []
+                }
+              },
+              "publicSubnet2": {
+                "id": "publicSubnet2",
+                "path": "RihanaNetworkStack/RihaVpc/publicSubnet2",
+                "children": {
+                  "Subnet": {
+                    "id": "Subnet",
+                    "path": "RihanaNetworkStack/RihaVpc/publicSubnet2/Subnet",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                      "aws:cdk:cloudformation:props": {
+                        "availabilityZone": {
+                          "Fn::Select": [
+                            1,
+                            {
+                              "Fn::GetAZs": ""
+                            }
+                          ]
+                        },
+                        "cidrBlock": "10.0.64.0/18",
+                        "mapPublicIpOnLaunch": true,
+                        "tags": [
+                          {
+                            "key": "aws-cdk:subnet-name",
+                            "value": "public"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-type",
+                            "value": "Public"
+                          },
+                          {
+                            "key": "Name",
+                            "value": "RihanaNetworkStack/RihaVpc/publicSubnet2"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "RihaVpc15A21ED3"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
+                      "version": "2.178.0"
+                    }
+                  },
+                  "Acl": {
+                    "id": "Acl",
+                    "path": "RihanaNetworkStack/RihaVpc/publicSubnet2/Acl",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.178.0",
+                      "metadata": []
+                    }
+                  },
+                  "RouteTable": {
+                    "id": "RouteTable",
+                    "path": "RihanaNetworkStack/RihaVpc/publicSubnet2/RouteTable",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:props": {
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "RihanaNetworkStack/RihaVpc/publicSubnet2"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "RihaVpc15A21ED3"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
+                      "version": "2.178.0"
+                    }
+                  },
+                  "RouteTableAssociation": {
+                    "id": "RouteTableAssociation",
+                    "path": "RihanaNetworkStack/RihaVpc/publicSubnet2/RouteTableAssociation",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "RihaVpcpublicSubnet2RouteTable8B4F5045"
+                        },
+                        "subnetId": {
+                          "Ref": "RihaVpcpublicSubnet2Subnet67072C1B"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                      "version": "2.178.0"
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "RihanaNetworkStack/RihaVpc/publicSubnet2/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "gatewayId": {
+                          "Ref": "RihaVpcIGW9527F9D4"
+                        },
+                        "routeTableId": {
+                          "Ref": "RihaVpcpublicSubnet2RouteTable8B4F5045"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
+                      "version": "2.178.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.PublicSubnet",
+                  "version": "2.178.0",
+                  "metadata": []
+                }
+              },
+              "privateSubnet1": {
+                "id": "privateSubnet1",
+                "path": "RihanaNetworkStack/RihaVpc/privateSubnet1",
+                "children": {
+                  "Subnet": {
+                    "id": "Subnet",
+                    "path": "RihanaNetworkStack/RihaVpc/privateSubnet1/Subnet",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                      "aws:cdk:cloudformation:props": {
+                        "availabilityZone": {
+                          "Fn::Select": [
+                            0,
+                            {
+                              "Fn::GetAZs": ""
+                            }
+                          ]
+                        },
+                        "cidrBlock": "10.0.128.0/18",
+                        "mapPublicIpOnLaunch": false,
+                        "tags": [
+                          {
+                            "key": "aws-cdk:subnet-name",
+                            "value": "private"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-type",
+                            "value": "Private"
+                          },
+                          {
+                            "key": "Name",
+                            "value": "RihanaNetworkStack/RihaVpc/privateSubnet1"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "RihaVpc15A21ED3"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
+                      "version": "2.178.0"
+                    }
+                  },
+                  "Acl": {
+                    "id": "Acl",
+                    "path": "RihanaNetworkStack/RihaVpc/privateSubnet1/Acl",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.178.0",
+                      "metadata": []
+                    }
+                  },
+                  "RouteTable": {
+                    "id": "RouteTable",
+                    "path": "RihanaNetworkStack/RihaVpc/privateSubnet1/RouteTable",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:props": {
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "RihanaNetworkStack/RihaVpc/privateSubnet1"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "RihaVpc15A21ED3"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
+                      "version": "2.178.0"
+                    }
+                  },
+                  "RouteTableAssociation": {
+                    "id": "RouteTableAssociation",
+                    "path": "RihanaNetworkStack/RihaVpc/privateSubnet1/RouteTableAssociation",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "RihaVpcprivateSubnet1RouteTable24A77CED"
+                        },
+                        "subnetId": {
+                          "Ref": "RihaVpcprivateSubnet1Subnet7053DAD3"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                      "version": "2.178.0"
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "RihanaNetworkStack/RihaVpc/privateSubnet1/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "natGatewayId": {
+                          "Ref": "RihaVpcpublicSubnet1NATGateway2BA74A35"
+                        },
+                        "routeTableId": {
+                          "Ref": "RihaVpcprivateSubnet1RouteTable24A77CED"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
+                      "version": "2.178.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.PrivateSubnet",
+                  "version": "2.178.0",
+                  "metadata": []
+                }
+              },
+              "privateSubnet2": {
+                "id": "privateSubnet2",
+                "path": "RihanaNetworkStack/RihaVpc/privateSubnet2",
+                "children": {
+                  "Subnet": {
+                    "id": "Subnet",
+                    "path": "RihanaNetworkStack/RihaVpc/privateSubnet2/Subnet",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                      "aws:cdk:cloudformation:props": {
+                        "availabilityZone": {
+                          "Fn::Select": [
+                            1,
+                            {
+                              "Fn::GetAZs": ""
+                            }
+                          ]
+                        },
+                        "cidrBlock": "10.0.192.0/18",
+                        "mapPublicIpOnLaunch": false,
+                        "tags": [
+                          {
+                            "key": "aws-cdk:subnet-name",
+                            "value": "private"
+                          },
+                          {
+                            "key": "aws-cdk:subnet-type",
+                            "value": "Private"
+                          },
+                          {
+                            "key": "Name",
+                            "value": "RihanaNetworkStack/RihaVpc/privateSubnet2"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "RihaVpc15A21ED3"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
+                      "version": "2.178.0"
+                    }
+                  },
+                  "Acl": {
+                    "id": "Acl",
+                    "path": "RihanaNetworkStack/RihaVpc/privateSubnet2/Acl",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.178.0",
+                      "metadata": []
+                    }
+                  },
+                  "RouteTable": {
+                    "id": "RouteTable",
+                    "path": "RihanaNetworkStack/RihaVpc/privateSubnet2/RouteTable",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                      "aws:cdk:cloudformation:props": {
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "RihanaNetworkStack/RihaVpc/privateSubnet2"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "RihaVpc15A21ED3"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
+                      "version": "2.178.0"
+                    }
+                  },
+                  "RouteTableAssociation": {
+                    "id": "RouteTableAssociation",
+                    "path": "RihanaNetworkStack/RihaVpc/privateSubnet2/RouteTableAssociation",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                      "aws:cdk:cloudformation:props": {
+                        "routeTableId": {
+                          "Ref": "RihaVpcprivateSubnet2RouteTable06CACFB8"
+                        },
+                        "subnetId": {
+                          "Ref": "RihaVpcprivateSubnet2SubnetBBA59AD8"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                      "version": "2.178.0"
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "RihanaNetworkStack/RihaVpc/privateSubnet2/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "natGatewayId": {
+                          "Ref": "RihaVpcpublicSubnet1NATGateway2BA74A35"
+                        },
+                        "routeTableId": {
+                          "Ref": "RihaVpcprivateSubnet2RouteTable06CACFB8"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
+                      "version": "2.178.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.PrivateSubnet",
+                  "version": "2.178.0",
+                  "metadata": []
+                }
+              },
+              "IGW": {
+                "id": "IGW",
+                "path": "RihanaNetworkStack/RihaVpc/IGW",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::EC2::InternetGateway",
+                  "aws:cdk:cloudformation:props": {
+                    "tags": [
+                      {
+                        "key": "Name",
+                        "value": "RihanaNetworkStack/RihaVpc"
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.CfnInternetGateway",
+                  "version": "2.178.0"
+                }
+              },
+              "VPCGW": {
+                "id": "VPCGW",
+                "path": "RihanaNetworkStack/RihaVpc/VPCGW",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::EC2::VPCGatewayAttachment",
+                  "aws:cdk:cloudformation:props": {
+                    "internetGatewayId": {
+                      "Ref": "RihaVpcIGW9527F9D4"
+                    },
+                    "vpcId": {
+                      "Ref": "RihaVpc15A21ED3"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.CfnVPCGatewayAttachment",
+                  "version": "2.178.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ec2.Vpc",
+              "version": "2.178.0",
+              "metadata": []
+            }
+          },
+          "RedshiftSG": {
+            "id": "RedshiftSG",
+            "path": "RihanaNetworkStack/RedshiftSG",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "RihanaNetworkStack/RedshiftSG/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                  "aws:cdk:cloudformation:props": {
+                    "groupDescription": "Redshift Serverless security group",
+                    "securityGroupEgress": [
+                      {
+                        "cidrIp": "0.0.0.0/0",
+                        "description": "Allow all outbound traffic by default",
+                        "ipProtocol": "-1"
+                      }
+                    ],
+                    "vpcId": {
+                      "Ref": "RihaVpc15A21ED3"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroup",
+                  "version": "2.178.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ec2.SecurityGroup",
+              "version": "2.178.0",
+              "metadata": []
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "RihanaNetworkStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "RihanaNetworkStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.178.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.5"
+            }
+          },
+          "Exports": {
+            "id": "Exports",
+            "path": "RihanaNetworkStack/Exports",
+            "children": {
+              "Output{\"Fn::GetAtt\":[\"RedshiftSG19E35DFC\",\"GroupId\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"RedshiftSG19E35DFC\",\"GroupId\"]}",
+                "path": "RihanaNetworkStack/Exports/Output{\"Fn::GetAtt\":[\"RedshiftSG19E35DFC\",\"GroupId\"]}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.178.0"
+                }
+              },
+              "Output{\"Ref\":\"RihaVpcprivateSubnet1Subnet7053DAD3\"}": {
+                "id": "Output{\"Ref\":\"RihaVpcprivateSubnet1Subnet7053DAD3\"}",
+                "path": "RihanaNetworkStack/Exports/Output{\"Ref\":\"RihaVpcprivateSubnet1Subnet7053DAD3\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.178.0"
+                }
+              },
+              "Output{\"Ref\":\"RihaVpcprivateSubnet2SubnetBBA59AD8\"}": {
+                "id": "Output{\"Ref\":\"RihaVpcprivateSubnet2SubnetBBA59AD8\"}",
+                "path": "RihanaNetworkStack/Exports/Output{\"Ref\":\"RihaVpcprivateSubnet2SubnetBBA59AD8\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.178.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.5"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "RihanaNetworkStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.178.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "RihanaNetworkStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.178.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.178.0"
+        }
+      },
+      "RihaStorageStack": {
+        "id": "RihaStorageStack",
+        "path": "RihaStorageStack",
+        "children": {
+          "Kms": {
+            "id": "Kms",
+            "path": "RihaStorageStack/Kms",
+            "children": {
+              "DataKey": {
+                "id": "DataKey",
+                "path": "RihaStorageStack/Kms/DataKey",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "RihaStorageStack/Kms/DataKey/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::KMS::Key",
+                      "aws:cdk:cloudformation:props": {
+                        "enableKeyRotation": true,
+                        "keyPolicy": {
+                          "Statement": [
+                            {
+                              "Action": "kms:*",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "AWS": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":iam::",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":root"
+                                    ]
+                                  ]
+                                }
+                              },
+                              "Resource": "*"
+                            },
+                            {
+                              "Action": [
+                                "kms:Encrypt",
+                                "kms:Decrypt",
+                                "kms:GenerateDataKey*",
+                                "kms:DescribeKey"
+                              ],
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": [
+                                  "redshift.amazonaws.com",
+                                  "redshift-serverless.amazonaws.com"
+                                ]
+                              },
+                              "Resource": "*",
+                              "Sid": "AllowRedshiftUsage"
+                            },
+                            {
+                              "Action": [
+                                "kms:Encrypt",
+                                "kms:GenerateDataKey*",
+                                "kms:DescribeKey"
+                              ],
+                              "Condition": {
+                                "StringEquals": {
+                                  "aws:SourceAccount": {
+                                    "Ref": "AWS::AccountId"
+                                  }
+                                }
+                              },
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              },
+                              "Resource": "*",
+                              "Sid": "AllowLambdaS3Deployments"
+                            },
+                            {
+                              "Action": [
+                                "kms:Encrypt",
+                                "kms:Decrypt",
+                                "kms:ReEncrypt*",
+                                "kms:GenerateDataKey*",
+                                "kms:DescribeKey"
+                              ],
+                              "Condition": {
+                                "StringEquals": {
+                                  "aws:SourceAccount": {
+                                    "Ref": "AWS::AccountId"
+                                  },
+                                  "kms:ViaService": "s3.us-east-1.amazonaws.com"
+                                }
+                              },
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "s3.amazonaws.com"
+                              },
+                              "Resource": "*",
+                              "Sid": "AllowS3UseOfKey"
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_kms.CfnKey",
+                      "version": "2.178.0"
+                    }
+                  },
+                  "Alias": {
+                    "id": "Alias",
+                    "path": "RihaStorageStack/Kms/DataKey/Alias",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "RihaStorageStack/Kms/DataKey/Alias/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::KMS::Alias",
+                          "aws:cdk:cloudformation:props": {
+                            "aliasName": "alias/riha-data",
+                            "targetKeyId": {
+                              "Fn::GetAtt": [
+                                "KmsDataKeyCF9D86DB",
+                                "Arn"
+                              ]
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_kms.CfnAlias",
+                          "version": "2.178.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_kms.Alias",
+                      "version": "2.178.0",
+                      "metadata": []
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_kms.Key",
+                  "version": "2.178.0",
+                  "metadata": []
+                }
+              },
+              "RihaDataKeyArn": {
+                "id": "RihaDataKeyArn",
+                "path": "RihaStorageStack/Kms/RihaDataKeyArn",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.178.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.5"
+            }
+          },
+          "ImportedRihaDataKey": {
+            "id": "ImportedRihaDataKey",
+            "path": "RihaStorageStack/ImportedRihaDataKey",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.178.0",
+              "metadata": []
+            }
+          },
+          "S3": {
+            "id": "S3",
+            "path": "RihaStorageStack/S3",
+            "children": {
+              "DataLake": {
+                "id": "DataLake",
+                "path": "RihaStorageStack/S3/DataLake",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "RihaStorageStack/S3/DataLake/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                      "aws:cdk:cloudformation:props": {
+                        "bucketEncryption": {
+                          "serverSideEncryptionConfiguration": [
+                            {
+                              "serverSideEncryptionByDefault": {
+                                "sseAlgorithm": "aws:kms",
+                                "kmsMasterKeyId": {
+                                  "Fn::GetAtt": [
+                                    "KmsDataKeyCF9D86DB",
+                                    "Arn"
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "publicAccessBlockConfiguration": {
+                          "blockPublicAcls": true,
+                          "blockPublicPolicy": true,
+                          "ignorePublicAcls": true,
+                          "restrictPublicBuckets": true
+                        },
+                        "versioningConfiguration": {
+                          "status": "Enabled"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
+                      "version": "2.178.0"
+                    }
+                  },
+                  "Policy": {
+                    "id": "Policy",
+                    "path": "RihaStorageStack/S3/DataLake/Policy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "RihaStorageStack/S3/DataLake/Policy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::S3::BucketPolicy",
+                          "aws:cdk:cloudformation:props": {
+                            "bucket": {
+                              "Ref": "S3DataLakeE27C7386"
+                            },
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "s3:*",
+                                  "Condition": {
+                                    "Bool": {
+                                      "aws:SecureTransport": "false"
+                                    }
+                                  },
+                                  "Effect": "Deny",
+                                  "Principal": {
+                                    "AWS": "*"
+                                  },
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "S3DataLakeE27C7386",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "S3DataLakeE27C7386",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_s3.CfnBucketPolicy",
+                          "version": "2.178.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketPolicy",
+                      "version": "2.178.0",
+                      "metadata": []
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.Bucket",
+                  "version": "2.178.0",
+                  "metadata": []
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.5"
+            }
+          },
+          "RihaDataLakeKmsKeyArn": {
+            "id": "RihaDataLakeKmsKeyArn",
+            "path": "RihaStorageStack/RihaDataLakeKmsKeyArn",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.178.0"
+            }
+          },
+          "RihaDataLakeBucketName": {
+            "id": "RihaDataLakeBucketName",
+            "path": "RihaStorageStack/RihaDataLakeBucketName",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.178.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "RihaStorageStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "RihaStorageStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.178.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.5"
+            }
+          },
+          "Exports": {
+            "id": "Exports",
+            "path": "RihaStorageStack/Exports",
+            "children": {
+              "Output{\"Fn::GetAtt\":[\"S3DataLakeE27C7386\",\"Arn\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"S3DataLakeE27C7386\",\"Arn\"]}",
+                "path": "RihaStorageStack/Exports/Output{\"Fn::GetAtt\":[\"S3DataLakeE27C7386\",\"Arn\"]}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.178.0"
+                }
+              },
+              "Output{\"Fn::GetAtt\":[\"KmsDataKeyCF9D86DB\",\"Arn\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"KmsDataKeyCF9D86DB\",\"Arn\"]}",
+                "path": "RihaStorageStack/Exports/Output{\"Fn::GetAtt\":[\"KmsDataKeyCF9D86DB\",\"Arn\"]}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.178.0"
+                }
+              },
+              "Output{\"Ref\":\"S3DataLakeE27C7386\"}": {
+                "id": "Output{\"Ref\":\"S3DataLakeE27C7386\"}",
+                "path": "RihaStorageStack/Exports/Output{\"Ref\":\"S3DataLakeE27C7386\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.178.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.5"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "RihaStorageStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.178.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "RihaStorageStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.178.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.178.0"
+        }
+      },
+      "RihaRedshiftServerlessStack": {
+        "id": "RihaRedshiftServerlessStack",
+        "path": "RihaRedshiftServerlessStack",
+        "children": {
+          "ImportedRihaDataKey": {
+            "id": "ImportedRihaDataKey",
+            "path": "RihaRedshiftServerlessStack/ImportedRihaDataKey",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.178.0",
+              "metadata": []
+            }
+          },
+          "RedshiftServerlessRole": {
+            "id": "RedshiftServerlessRole",
+            "path": "RihaRedshiftServerlessStack/RedshiftServerlessRole",
+            "children": {
+              "ImportRedshiftServerlessRole": {
+                "id": "ImportRedshiftServerlessRole",
+                "path": "RihaRedshiftServerlessStack/RedshiftServerlessRole/ImportRedshiftServerlessRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.178.0",
+                  "metadata": []
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "RihaRedshiftServerlessStack/RedshiftServerlessRole/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                  "aws:cdk:cloudformation:props": {
+                    "assumeRolePolicyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "redshift.amazonaws.com"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    },
+                    "description": "IAM role for Redshift Serverless access to S3 and Glue",
+                    "managedPolicyArns": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":iam::aws:policy/AmazonS3ReadOnlyAccess"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":iam::aws:policy/AWSGlueConsoleFullAccess"
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                  "version": "2.178.0"
+                }
+              },
+              "DefaultPolicy": {
+                "id": "DefaultPolicy",
+                "path": "RihaRedshiftServerlessStack/RedshiftServerlessRole/DefaultPolicy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "RihaRedshiftServerlessStack/RedshiftServerlessRole/DefaultPolicy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                      "aws:cdk:cloudformation:props": {
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": [
+                                "kms:Decrypt",
+                                "kms:GenerateDataKey*",
+                                "kms:DescribeKey"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": {
+                                "Fn::ImportValue": "RihaDataLakeKmsKeyArn:KmsKeyArn"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "policyName": "RedshiftServerlessRoleDefaultPolicyE3B556A2",
+                        "roles": [
+                          {
+                            "Ref": "RedshiftServerlessRoleD124E238"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                      "version": "2.178.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Policy",
+                  "version": "2.178.0",
+                  "metadata": []
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.Role",
+              "version": "2.178.0",
+              "metadata": []
+            }
+          },
+          "RedshiftNamespace": {
+            "id": "RedshiftNamespace",
+            "path": "RihaRedshiftServerlessStack/RedshiftNamespace",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::RedshiftServerless::Namespace",
+              "aws:cdk:cloudformation:props": {
+                "dbName": "riharedshiftserverlessstack_dev",
+                "iamRoles": [
+                  {
+                    "Fn::GetAtt": [
+                      "RedshiftServerlessRoleD124E238",
+                      "Arn"
+                    ]
+                  }
+                ],
+                "kmsKeyId": {
+                  "Fn::ImportValue": "RihaDataLakeKmsKeyArn:KmsKeyArn"
+                },
+                "manageAdminPassword": true,
+                "namespaceName": "riharedshiftserverlessstack-namespace"
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_redshiftserverless.CfnNamespace",
+              "version": "2.178.0"
+            }
+          },
+          "RedshiftWorkgroup": {
+            "id": "RedshiftWorkgroup",
+            "path": "RihaRedshiftServerlessStack/RedshiftWorkgroup",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::RedshiftServerless::Workgroup",
+              "aws:cdk:cloudformation:props": {
+                "baseCapacity": 8,
+                "namespaceName": "riharedshiftserverlessstack-namespace",
+                "publiclyAccessible": false,
+                "securityGroupIds": [
+                  {
+                    "Fn::ImportValue": "RihanaNetworkStack:ExportsOutputFnGetAttRedshiftSG19E35DFCGroupId3712FAAE"
+                  }
+                ],
+                "subnetIds": [
+                  {
+                    "Fn::ImportValue": "RihanaNetworkStack:ExportsOutputRefRihaVpcprivateSubnet1Subnet7053DAD33EC2B729"
+                  },
+                  {
+                    "Fn::ImportValue": "RihanaNetworkStack:ExportsOutputRefRihaVpcprivateSubnet2SubnetBBA59AD86B1C20D4"
+                  }
+                ],
+                "workgroupName": "riharedshiftserverlessstack-redshift-wg"
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_redshiftserverless.CfnWorkgroup",
+              "version": "2.178.0"
+            }
+          },
+          "RedshiftIamRoleArn": {
+            "id": "RedshiftIamRoleArn",
+            "path": "RihaRedshiftServerlessStack/RedshiftIamRoleArn",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.178.0"
+            }
+          },
+          "RedshiftWorkgroupName": {
+            "id": "RedshiftWorkgroupName",
+            "path": "RihaRedshiftServerlessStack/RedshiftWorkgroupName",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.178.0"
+            }
+          },
+          "RedshiftDatabaseName": {
+            "id": "RedshiftDatabaseName",
+            "path": "RihaRedshiftServerlessStack/RedshiftDatabaseName",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.178.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "RihaRedshiftServerlessStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "RihaRedshiftServerlessStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.178.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.5"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "RihaRedshiftServerlessStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.178.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "RihaRedshiftServerlessStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.178.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.178.0"
+        }
+      },
+      "RihaGlueStack": {
+        "id": "RihaGlueStack",
+        "path": "RihaGlueStack",
+        "children": {
+          "ImportedRihaDataKey": {
+            "id": "ImportedRihaDataKey",
+            "path": "RihaGlueStack/ImportedRihaDataKey",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.178.0",
+              "metadata": []
+            }
+          },
+          "RihaCuratedDb": {
+            "id": "RihaCuratedDb",
+            "path": "RihaGlueStack/RihaCuratedDb",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::Glue::Database",
+              "aws:cdk:cloudformation:props": {
+                "catalogId": {
+                  "Ref": "AWS::AccountId"
+                },
+                "databaseInput": {
+                  "name": "rihagluestack_curated_db"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_glue.CfnDatabase",
+              "version": "2.178.0"
+            }
+          },
+          "RihaGluePipeline": {
+            "id": "RihaGluePipeline",
+            "path": "RihaGlueStack/RihaGluePipeline",
+            "children": {
+              "GlueExecutionRole": {
+                "id": "GlueExecutionRole",
+                "path": "RihaGlueStack/RihaGluePipeline/GlueExecutionRole",
+                "children": {
+                  "ImportGlueExecutionRole": {
+                    "id": "ImportGlueExecutionRole",
+                    "path": "RihaGlueStack/RihaGluePipeline/GlueExecutionRole/ImportGlueExecutionRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.178.0",
+                      "metadata": []
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "RihaGlueStack/RihaGluePipeline/GlueExecutionRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "glue.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSGlueServiceRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.178.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "RihaGlueStack/RihaGluePipeline/GlueExecutionRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "RihaGlueStack/RihaGluePipeline/GlueExecutionRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "redshift-data:ExecuteStatement",
+                                    "redshift-data:DescribeStatement",
+                                    "redshift-data:GetStatementResult",
+                                    "redshift-serverless:GetWorkgroup",
+                                    "redshift-serverless:GetNamespace",
+                                    "glue:GetDatabase",
+                                    "glue:GetDatabases",
+                                    "glue:GetTable",
+                                    "glue:GetTables"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                },
+                                {
+                                  "Action": [
+                                    "s3:GetObject*",
+                                    "s3:GetBucket*",
+                                    "s3:List*",
+                                    "s3:DeleteObject*",
+                                    "s3:PutObject",
+                                    "s3:PutObjectLegalHold",
+                                    "s3:PutObjectRetention",
+                                    "s3:PutObjectTagging",
+                                    "s3:PutObjectVersionTagging",
+                                    "s3:Abort*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::ImportValue": "RihaStorageStack:ExportsOutputFnGetAttS3DataLakeE27C7386Arn6E30F4A0"
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::ImportValue": "RihaStorageStack:ExportsOutputFnGetAttS3DataLakeE27C7386Arn6E30F4A0"
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "kms:Decrypt",
+                                    "kms:DescribeKey",
+                                    "kms:Encrypt",
+                                    "kms:ReEncrypt*",
+                                    "kms:GenerateDataKey*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::ImportValue": "RihaStorageStack:ExportsOutputFnGetAttKmsDataKeyCF9D86DBArnEB4E544D"
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "kms:Decrypt",
+                                    "kms:Encrypt",
+                                    "kms:ReEncrypt*",
+                                    "kms:GenerateDataKey*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::ImportValue": "RihaDataLakeKmsKeyArn:KmsKeyArn"
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "RihaGluePipelineGlueExecutionRoleDefaultPolicy585C6892",
+                            "roles": [
+                              {
+                                "Ref": "RihaGluePipelineGlueExecutionRole584B293F"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.178.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.178.0",
+                      "metadata": []
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.178.0",
+                  "metadata": []
+                }
+              },
+              "MutableRoleImportedRedshiftIamRole": {
+                "id": "MutableRoleImportedRedshiftIamRole",
+                "path": "RihaGlueStack/RihaGluePipeline/MutableRoleImportedRedshiftIamRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.178.0",
+                  "metadata": []
+                }
+              },
+              "ImportedRedshiftIamRole": {
+                "id": "ImportedRedshiftIamRole",
+                "path": "RihaGlueStack/RihaGluePipeline/ImportedRedshiftIamRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.178.0",
+                  "metadata": []
+                }
+              },
+              "Job01validateclean": {
+                "id": "Job01validateclean",
+                "path": "RihaGlueStack/RihaGluePipeline/Job01validateclean",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Glue::Job",
+                  "aws:cdk:cloudformation:props": {
+                    "command": {
+                      "name": "glueetl",
+                      "scriptLocation": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "s3://",
+                            {
+                              "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+                            },
+                            "/scripts/01_validate_clean.py"
+                          ]
+                        ]
+                      },
+                      "pythonVersion": "3"
+                    },
+                    "defaultArguments": {
+                      "--BUCKET": {
+                        "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+                      },
+                      "--RAW_PREFIX": "raw/",
+                      "--VALIDATED_PREFIX": "validated/",
+                      "--PROCESSED_PREFIX": "processed/",
+                      "--MASTER_PREFIX": "master/",
+                      "--SCD2_PREFIX": "scd2/",
+                      "--CURATED_PREFIX": "curated/curated_trips",
+                      "--AUDIT_PREFIX": "audit/",
+                      "--QUARANTINE_PREFIX": "quarantine/",
+                      "--BACKUP_PREFIX": "backup/",
+                      "--job-bookmark-option": "job-bookmark-disable",
+                      "--enable-continuous-cloudwatch-log": "true",
+                      "--enable-metrics": "true",
+                      "--datalake-formats": "delta",
+                      "--conf": "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension ",
+                      "--conf1": "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog",
+                      "--REDSHIFT_WORKGROUP": {
+                        "Fn::ImportValue": "RedshiftWorkgroupName"
+                      },
+                      "--REDSHIFT_DB": {
+                        "Fn::ImportValue": "RedshiftDatabaseName"
+                      },
+                      "--REDSHIFT_IAM_ROLE_ARN": {
+                        "Fn::ImportValue": "RedshiftIamRoleArn"
+                      },
+                      "--GLUE_CATALOG_DB": {
+                        "Ref": "RihaCuratedDb"
+                      }
+                    },
+                    "glueVersion": "4.0",
+                    "name": "01_validate_clean",
+                    "numberOfWorkers": 5,
+                    "role": {
+                      "Fn::GetAtt": [
+                        "RihaGluePipelineGlueExecutionRole584B293F",
+                        "Arn"
+                      ]
+                    },
+                    "workerType": "G.1X"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_glue.CfnJob",
+                  "version": "2.178.0"
+                }
+              },
+              "Job02processtrips": {
+                "id": "Job02processtrips",
+                "path": "RihaGlueStack/RihaGluePipeline/Job02processtrips",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Glue::Job",
+                  "aws:cdk:cloudformation:props": {
+                    "command": {
+                      "name": "glueetl",
+                      "scriptLocation": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "s3://",
+                            {
+                              "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+                            },
+                            "/scripts/02_process_trips.py"
+                          ]
+                        ]
+                      },
+                      "pythonVersion": "3"
+                    },
+                    "defaultArguments": {
+                      "--BUCKET": {
+                        "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+                      },
+                      "--RAW_PREFIX": "raw/",
+                      "--VALIDATED_PREFIX": "validated/",
+                      "--PROCESSED_PREFIX": "processed/",
+                      "--MASTER_PREFIX": "master/",
+                      "--SCD2_PREFIX": "scd2/",
+                      "--CURATED_PREFIX": "curated/curated_trips",
+                      "--AUDIT_PREFIX": "audit/",
+                      "--QUARANTINE_PREFIX": "quarantine/",
+                      "--BACKUP_PREFIX": "backup/",
+                      "--job-bookmark-option": "job-bookmark-disable",
+                      "--enable-continuous-cloudwatch-log": "true",
+                      "--enable-metrics": "true",
+                      "--datalake-formats": "delta",
+                      "--conf": "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension ",
+                      "--conf1": "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog",
+                      "--REDSHIFT_WORKGROUP": {
+                        "Fn::ImportValue": "RedshiftWorkgroupName"
+                      },
+                      "--REDSHIFT_DB": {
+                        "Fn::ImportValue": "RedshiftDatabaseName"
+                      },
+                      "--REDSHIFT_IAM_ROLE_ARN": {
+                        "Fn::ImportValue": "RedshiftIamRoleArn"
+                      },
+                      "--GLUE_CATALOG_DB": {
+                        "Ref": "RihaCuratedDb"
+                      }
+                    },
+                    "glueVersion": "4.0",
+                    "name": "02_process_trips",
+                    "numberOfWorkers": 5,
+                    "role": {
+                      "Fn::GetAtt": [
+                        "RihaGluePipelineGlueExecutionRole584B293F",
+                        "Arn"
+                      ]
+                    },
+                    "workerType": "G.1X"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_glue.CfnJob",
+                  "version": "2.178.0"
+                }
+              },
+              "Job02bcreategoldenzones": {
+                "id": "Job02bcreategoldenzones",
+                "path": "RihaGlueStack/RihaGluePipeline/Job02bcreategoldenzones",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Glue::Job",
+                  "aws:cdk:cloudformation:props": {
+                    "command": {
+                      "name": "glueetl",
+                      "scriptLocation": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "s3://",
+                            {
+                              "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+                            },
+                            "/scripts/02b_create_golden_zones.py"
+                          ]
+                        ]
+                      },
+                      "pythonVersion": "3"
+                    },
+                    "defaultArguments": {
+                      "--BUCKET": {
+                        "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+                      },
+                      "--RAW_PREFIX": "raw/",
+                      "--VALIDATED_PREFIX": "validated/",
+                      "--PROCESSED_PREFIX": "processed/",
+                      "--MASTER_PREFIX": "master/",
+                      "--SCD2_PREFIX": "scd2/",
+                      "--CURATED_PREFIX": "curated/curated_trips",
+                      "--AUDIT_PREFIX": "audit/",
+                      "--QUARANTINE_PREFIX": "quarantine/",
+                      "--BACKUP_PREFIX": "backup/",
+                      "--job-bookmark-option": "job-bookmark-disable",
+                      "--enable-continuous-cloudwatch-log": "true",
+                      "--enable-metrics": "true",
+                      "--datalake-formats": "delta",
+                      "--conf": "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension ",
+                      "--conf1": "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog",
+                      "--REDSHIFT_WORKGROUP": {
+                        "Fn::ImportValue": "RedshiftWorkgroupName"
+                      },
+                      "--REDSHIFT_DB": {
+                        "Fn::ImportValue": "RedshiftDatabaseName"
+                      },
+                      "--REDSHIFT_IAM_ROLE_ARN": {
+                        "Fn::ImportValue": "RedshiftIamRoleArn"
+                      },
+                      "--GLUE_CATALOG_DB": {
+                        "Ref": "RihaCuratedDb"
+                      }
+                    },
+                    "glueVersion": "4.0",
+                    "name": "02b_create_golden_zones",
+                    "numberOfWorkers": 5,
+                    "role": {
+                      "Fn::GetAtt": [
+                        "RihaGluePipelineGlueExecutionRole584B293F",
+                        "Arn"
+                      ]
+                    },
+                    "workerType": "G.1X"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_glue.CfnJob",
+                  "version": "2.178.0"
+                }
+              },
+              "Job02ccreategoldenvendors": {
+                "id": "Job02ccreategoldenvendors",
+                "path": "RihaGlueStack/RihaGluePipeline/Job02ccreategoldenvendors",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Glue::Job",
+                  "aws:cdk:cloudformation:props": {
+                    "command": {
+                      "name": "glueetl",
+                      "scriptLocation": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "s3://",
+                            {
+                              "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+                            },
+                            "/scripts/02c_create_golden_vendors.py"
+                          ]
+                        ]
+                      },
+                      "pythonVersion": "3"
+                    },
+                    "defaultArguments": {
+                      "--BUCKET": {
+                        "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+                      },
+                      "--RAW_PREFIX": "raw/",
+                      "--VALIDATED_PREFIX": "validated/",
+                      "--PROCESSED_PREFIX": "processed/",
+                      "--MASTER_PREFIX": "master/",
+                      "--SCD2_PREFIX": "scd2/",
+                      "--CURATED_PREFIX": "curated/curated_trips",
+                      "--AUDIT_PREFIX": "audit/",
+                      "--QUARANTINE_PREFIX": "quarantine/",
+                      "--BACKUP_PREFIX": "backup/",
+                      "--job-bookmark-option": "job-bookmark-disable",
+                      "--enable-continuous-cloudwatch-log": "true",
+                      "--enable-metrics": "true",
+                      "--datalake-formats": "delta",
+                      "--conf": "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension ",
+                      "--conf1": "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog",
+                      "--REDSHIFT_WORKGROUP": {
+                        "Fn::ImportValue": "RedshiftWorkgroupName"
+                      },
+                      "--REDSHIFT_DB": {
+                        "Fn::ImportValue": "RedshiftDatabaseName"
+                      },
+                      "--REDSHIFT_IAM_ROLE_ARN": {
+                        "Fn::ImportValue": "RedshiftIamRoleArn"
+                      },
+                      "--GLUE_CATALOG_DB": {
+                        "Ref": "RihaCuratedDb"
+                      }
+                    },
+                    "glueVersion": "4.0",
+                    "name": "02c_create_golden_vendors",
+                    "numberOfWorkers": 5,
+                    "role": {
+                      "Fn::GetAtt": [
+                        "RihaGluePipelineGlueExecutionRole584B293F",
+                        "Arn"
+                      ]
+                    },
+                    "workerType": "G.1X"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_glue.CfnJob",
+                  "version": "2.178.0"
+                }
+              },
+              "Job03scd2zones": {
+                "id": "Job03scd2zones",
+                "path": "RihaGlueStack/RihaGluePipeline/Job03scd2zones",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Glue::Job",
+                  "aws:cdk:cloudformation:props": {
+                    "command": {
+                      "name": "glueetl",
+                      "scriptLocation": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "s3://",
+                            {
+                              "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+                            },
+                            "/scripts/03_scd2_zones.py"
+                          ]
+                        ]
+                      },
+                      "pythonVersion": "3"
+                    },
+                    "defaultArguments": {
+                      "--BUCKET": {
+                        "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+                      },
+                      "--RAW_PREFIX": "raw/",
+                      "--VALIDATED_PREFIX": "validated/",
+                      "--PROCESSED_PREFIX": "processed/",
+                      "--MASTER_PREFIX": "master/",
+                      "--SCD2_PREFIX": "scd2/",
+                      "--CURATED_PREFIX": "curated/curated_trips",
+                      "--AUDIT_PREFIX": "audit/",
+                      "--QUARANTINE_PREFIX": "quarantine/",
+                      "--BACKUP_PREFIX": "backup/",
+                      "--job-bookmark-option": "job-bookmark-disable",
+                      "--enable-continuous-cloudwatch-log": "true",
+                      "--enable-metrics": "true",
+                      "--datalake-formats": "delta",
+                      "--conf": "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension ",
+                      "--conf1": "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog",
+                      "--REDSHIFT_WORKGROUP": {
+                        "Fn::ImportValue": "RedshiftWorkgroupName"
+                      },
+                      "--REDSHIFT_DB": {
+                        "Fn::ImportValue": "RedshiftDatabaseName"
+                      },
+                      "--REDSHIFT_IAM_ROLE_ARN": {
+                        "Fn::ImportValue": "RedshiftIamRoleArn"
+                      },
+                      "--GLUE_CATALOG_DB": {
+                        "Ref": "RihaCuratedDb"
+                      }
+                    },
+                    "glueVersion": "4.0",
+                    "name": "03_scd2_zones",
+                    "numberOfWorkers": 5,
+                    "role": {
+                      "Fn::GetAtt": [
+                        "RihaGluePipelineGlueExecutionRole584B293F",
+                        "Arn"
+                      ]
+                    },
+                    "workerType": "G.1X"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_glue.CfnJob",
+                  "version": "2.178.0"
+                }
+              },
+              "Job03bscd2vendors": {
+                "id": "Job03bscd2vendors",
+                "path": "RihaGlueStack/RihaGluePipeline/Job03bscd2vendors",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Glue::Job",
+                  "aws:cdk:cloudformation:props": {
+                    "command": {
+                      "name": "glueetl",
+                      "scriptLocation": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "s3://",
+                            {
+                              "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+                            },
+                            "/scripts/03b_scd2_vendors.py"
+                          ]
+                        ]
+                      },
+                      "pythonVersion": "3"
+                    },
+                    "defaultArguments": {
+                      "--BUCKET": {
+                        "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+                      },
+                      "--RAW_PREFIX": "raw/",
+                      "--VALIDATED_PREFIX": "validated/",
+                      "--PROCESSED_PREFIX": "processed/",
+                      "--MASTER_PREFIX": "master/",
+                      "--SCD2_PREFIX": "scd2/",
+                      "--CURATED_PREFIX": "curated/curated_trips",
+                      "--AUDIT_PREFIX": "audit/",
+                      "--QUARANTINE_PREFIX": "quarantine/",
+                      "--BACKUP_PREFIX": "backup/",
+                      "--job-bookmark-option": "job-bookmark-disable",
+                      "--enable-continuous-cloudwatch-log": "true",
+                      "--enable-metrics": "true",
+                      "--datalake-formats": "delta",
+                      "--conf": "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension ",
+                      "--conf1": "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog",
+                      "--REDSHIFT_WORKGROUP": {
+                        "Fn::ImportValue": "RedshiftWorkgroupName"
+                      },
+                      "--REDSHIFT_DB": {
+                        "Fn::ImportValue": "RedshiftDatabaseName"
+                      },
+                      "--REDSHIFT_IAM_ROLE_ARN": {
+                        "Fn::ImportValue": "RedshiftIamRoleArn"
+                      },
+                      "--GLUE_CATALOG_DB": {
+                        "Ref": "RihaCuratedDb"
+                      }
+                    },
+                    "glueVersion": "4.0",
+                    "name": "03b_scd2_vendors",
+                    "numberOfWorkers": 5,
+                    "role": {
+                      "Fn::GetAtt": [
+                        "RihaGluePipelineGlueExecutionRole584B293F",
+                        "Arn"
+                      ]
+                    },
+                    "workerType": "G.1X"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_glue.CfnJob",
+                  "version": "2.178.0"
+                }
+              },
+              "Job04facttrips": {
+                "id": "Job04facttrips",
+                "path": "RihaGlueStack/RihaGluePipeline/Job04facttrips",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Glue::Job",
+                  "aws:cdk:cloudformation:props": {
+                    "command": {
+                      "name": "glueetl",
+                      "scriptLocation": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "s3://",
+                            {
+                              "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+                            },
+                            "/scripts/04_fact_trips.py"
+                          ]
+                        ]
+                      },
+                      "pythonVersion": "3"
+                    },
+                    "defaultArguments": {
+                      "--BUCKET": {
+                        "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+                      },
+                      "--RAW_PREFIX": "raw/",
+                      "--VALIDATED_PREFIX": "validated/",
+                      "--PROCESSED_PREFIX": "processed/",
+                      "--MASTER_PREFIX": "master/",
+                      "--SCD2_PREFIX": "scd2/",
+                      "--CURATED_PREFIX": "curated/curated_trips",
+                      "--AUDIT_PREFIX": "audit/",
+                      "--QUARANTINE_PREFIX": "quarantine/",
+                      "--BACKUP_PREFIX": "backup/",
+                      "--job-bookmark-option": "job-bookmark-disable",
+                      "--enable-continuous-cloudwatch-log": "true",
+                      "--enable-metrics": "true",
+                      "--datalake-formats": "delta",
+                      "--conf": "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension ",
+                      "--conf1": "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog",
+                      "--REDSHIFT_WORKGROUP": {
+                        "Fn::ImportValue": "RedshiftWorkgroupName"
+                      },
+                      "--REDSHIFT_DB": {
+                        "Fn::ImportValue": "RedshiftDatabaseName"
+                      },
+                      "--REDSHIFT_IAM_ROLE_ARN": {
+                        "Fn::ImportValue": "RedshiftIamRoleArn"
+                      },
+                      "--GLUE_CATALOG_DB": {
+                        "Ref": "RihaCuratedDb"
+                      }
+                    },
+                    "glueVersion": "4.0",
+                    "name": "04_fact_trips",
+                    "numberOfWorkers": 5,
+                    "role": {
+                      "Fn::GetAtt": [
+                        "RihaGluePipelineGlueExecutionRole584B293F",
+                        "Arn"
+                      ]
+                    },
+                    "workerType": "G.1X"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_glue.CfnJob",
+                  "version": "2.178.0"
+                }
+              },
+              "Job05redshiftload": {
+                "id": "Job05redshiftload",
+                "path": "RihaGlueStack/RihaGluePipeline/Job05redshiftload",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Glue::Job",
+                  "aws:cdk:cloudformation:props": {
+                    "command": {
+                      "name": "glueetl",
+                      "scriptLocation": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "s3://",
+                            {
+                              "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+                            },
+                            "/scripts/05_redshift_load.py"
+                          ]
+                        ]
+                      },
+                      "pythonVersion": "3"
+                    },
+                    "defaultArguments": {
+                      "--BUCKET": {
+                        "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+                      },
+                      "--RAW_PREFIX": "raw/",
+                      "--VALIDATED_PREFIX": "validated/",
+                      "--PROCESSED_PREFIX": "processed/",
+                      "--MASTER_PREFIX": "master/",
+                      "--SCD2_PREFIX": "scd2/",
+                      "--CURATED_PREFIX": "curated/curated_trips",
+                      "--AUDIT_PREFIX": "audit/",
+                      "--QUARANTINE_PREFIX": "quarantine/",
+                      "--BACKUP_PREFIX": "backup/",
+                      "--job-bookmark-option": "job-bookmark-disable",
+                      "--enable-continuous-cloudwatch-log": "true",
+                      "--enable-metrics": "true",
+                      "--datalake-formats": "delta",
+                      "--conf": "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension ",
+                      "--conf1": "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog",
+                      "--REDSHIFT_WORKGROUP": {
+                        "Fn::ImportValue": "RedshiftWorkgroupName"
+                      },
+                      "--REDSHIFT_DB": {
+                        "Fn::ImportValue": "RedshiftDatabaseName"
+                      },
+                      "--REDSHIFT_IAM_ROLE_ARN": {
+                        "Fn::ImportValue": "RedshiftIamRoleArn"
+                      },
+                      "--GLUE_CATALOG_DB": {
+                        "Ref": "RihaCuratedDb"
+                      }
+                    },
+                    "glueVersion": "4.0",
+                    "name": "05_redshift_load",
+                    "numberOfWorkers": 5,
+                    "role": {
+                      "Fn::GetAtt": [
+                        "RihaGluePipelineGlueExecutionRole584B293F",
+                        "Arn"
+                      ]
+                    },
+                    "workerType": "G.1X"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_glue.CfnJob",
+                  "version": "2.178.0"
+                }
+              },
+              "Job06governancemetrics": {
+                "id": "Job06governancemetrics",
+                "path": "RihaGlueStack/RihaGluePipeline/Job06governancemetrics",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Glue::Job",
+                  "aws:cdk:cloudformation:props": {
+                    "command": {
+                      "name": "glueetl",
+                      "scriptLocation": {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "s3://",
+                            {
+                              "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+                            },
+                            "/scripts/06_governance_metrics.py"
+                          ]
+                        ]
+                      },
+                      "pythonVersion": "3"
+                    },
+                    "defaultArguments": {
+                      "--BUCKET": {
+                        "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+                      },
+                      "--RAW_PREFIX": "raw/",
+                      "--VALIDATED_PREFIX": "validated/",
+                      "--PROCESSED_PREFIX": "processed/",
+                      "--MASTER_PREFIX": "master/",
+                      "--SCD2_PREFIX": "scd2/",
+                      "--CURATED_PREFIX": "curated/curated_trips",
+                      "--AUDIT_PREFIX": "audit/",
+                      "--QUARANTINE_PREFIX": "quarantine/",
+                      "--BACKUP_PREFIX": "backup/",
+                      "--job-bookmark-option": "job-bookmark-disable",
+                      "--enable-continuous-cloudwatch-log": "true",
+                      "--enable-metrics": "true",
+                      "--datalake-formats": "delta",
+                      "--conf": "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension ",
+                      "--conf1": "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog",
+                      "--REDSHIFT_WORKGROUP": {
+                        "Fn::ImportValue": "RedshiftWorkgroupName"
+                      },
+                      "--REDSHIFT_DB": {
+                        "Fn::ImportValue": "RedshiftDatabaseName"
+                      },
+                      "--REDSHIFT_IAM_ROLE_ARN": {
+                        "Fn::ImportValue": "RedshiftIamRoleArn"
+                      },
+                      "--GLUE_CATALOG_DB": {
+                        "Ref": "RihaCuratedDb"
+                      }
+                    },
+                    "glueVersion": "4.0",
+                    "name": "06_governance_metrics",
+                    "numberOfWorkers": 5,
+                    "role": {
+                      "Fn::GetAtt": [
+                        "RihaGluePipelineGlueExecutionRole584B293F",
+                        "Arn"
+                      ]
+                    },
+                    "workerType": "G.1X"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_glue.CfnJob",
+                  "version": "2.178.0"
+                }
+              },
+              "CuratedCrawler": {
+                "id": "CuratedCrawler",
+                "path": "RihaGlueStack/RihaGluePipeline/CuratedCrawler",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Glue::Crawler",
+                  "aws:cdk:cloudformation:props": {
+                    "databaseName": {
+                      "Ref": "RihaCuratedDb"
+                    },
+                    "name": "rihaoubt-curated-crawler",
+                    "recrawlPolicy": {
+                      "recrawlBehavior": "CRAWL_EVERYTHING"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "RihaGluePipelineGlueExecutionRole584B293F",
+                        "Arn"
+                      ]
+                    },
+                    "schemaChangePolicy": {
+                      "deleteBehavior": "DEPRECATE_IN_DATABASE",
+                      "updateBehavior": "UPDATE_IN_DATABASE"
+                    },
+                    "tablePrefix": "curated_",
+                    "targets": {
+                      "s3Targets": [
+                        {
+                          "path": {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "s3://",
+                                {
+                                  "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+                                },
+                                "/curated/"
+                              ]
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_glue.CfnCrawler",
+                  "version": "2.178.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.5"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "RihaGlueStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "RihaGlueStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.178.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.5"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "RihaGlueStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.178.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "RihaGlueStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.178.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.178.0"
+        }
+      },
+      "RihaOrchestrationStack": {
+        "id": "RihaOrchestrationStack",
+        "path": "RihaOrchestrationStack",
+        "children": {
+          "StartCuratedCrawler": {
+            "id": "StartCuratedCrawler",
+            "path": "RihaOrchestrationStack/StartCuratedCrawler",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_stepfunctions_tasks.CallAwsService",
+              "version": "2.178.0"
+            }
+          },
+          "WaitBeforePollingCrawler": {
+            "id": "WaitBeforePollingCrawler",
+            "path": "RihaOrchestrationStack/WaitBeforePollingCrawler",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_stepfunctions.Wait",
+              "version": "2.178.0"
+            }
+          },
+          "GetCuratedCrawlerStatus": {
+            "id": "GetCuratedCrawlerStatus",
+            "path": "RihaOrchestrationStack/GetCuratedCrawlerStatus",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_stepfunctions_tasks.CallAwsService",
+              "version": "2.178.0"
+            }
+          },
+          "CrawlerFinished?": {
+            "id": "CrawlerFinished?",
+            "path": "RihaOrchestrationStack/CrawlerFinished?",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_stepfunctions.Choice",
+              "version": "2.178.0"
+            }
+          },
+          "Run01validateclean": {
+            "id": "Run01validateclean",
+            "path": "RihaOrchestrationStack/Run01validateclean",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_stepfunctions_tasks.GlueStartJobRun",
+              "version": "2.178.0"
+            }
+          },
+          "Run02processtrips": {
+            "id": "Run02processtrips",
+            "path": "RihaOrchestrationStack/Run02processtrips",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_stepfunctions_tasks.GlueStartJobRun",
+              "version": "2.178.0"
+            }
+          },
+          "Run02bcreategoldenzones": {
+            "id": "Run02bcreategoldenzones",
+            "path": "RihaOrchestrationStack/Run02bcreategoldenzones",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_stepfunctions_tasks.GlueStartJobRun",
+              "version": "2.178.0"
+            }
+          },
+          "Run02ccreategoldenvendors": {
+            "id": "Run02ccreategoldenvendors",
+            "path": "RihaOrchestrationStack/Run02ccreategoldenvendors",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_stepfunctions_tasks.GlueStartJobRun",
+              "version": "2.178.0"
+            }
+          },
+          "Run03scd2zones": {
+            "id": "Run03scd2zones",
+            "path": "RihaOrchestrationStack/Run03scd2zones",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_stepfunctions_tasks.GlueStartJobRun",
+              "version": "2.178.0"
+            }
+          },
+          "Run03bscd2vendors": {
+            "id": "Run03bscd2vendors",
+            "path": "RihaOrchestrationStack/Run03bscd2vendors",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_stepfunctions_tasks.GlueStartJobRun",
+              "version": "2.178.0"
+            }
+          },
+          "Run04facttrips": {
+            "id": "Run04facttrips",
+            "path": "RihaOrchestrationStack/Run04facttrips",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_stepfunctions_tasks.GlueStartJobRun",
+              "version": "2.178.0"
+            }
+          },
+          "Run05redshiftload": {
+            "id": "Run05redshiftload",
+            "path": "RihaOrchestrationStack/Run05redshiftload",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_stepfunctions_tasks.GlueStartJobRun",
+              "version": "2.178.0"
+            }
+          },
+          "Run06governancemetrics": {
+            "id": "Run06governancemetrics",
+            "path": "RihaOrchestrationStack/Run06governancemetrics",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_stepfunctions_tasks.GlueStartJobRun",
+              "version": "2.178.0"
+            }
+          },
+          "PipelineStateMachineLogs": {
+            "id": "PipelineStateMachineLogs",
+            "path": "RihaOrchestrationStack/PipelineStateMachineLogs",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "RihaOrchestrationStack/PipelineStateMachineLogs/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Logs::LogGroup",
+                  "aws:cdk:cloudformation:props": {
+                    "retentionInDays": 7
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_logs.CfnLogGroup",
+                  "version": "2.178.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_logs.LogGroup",
+              "version": "2.178.0",
+              "metadata": []
+            }
+          },
+          "RihaOubtPipelineStateMachine": {
+            "id": "RihaOubtPipelineStateMachine",
+            "path": "RihaOrchestrationStack/RihaOubtPipelineStateMachine",
+            "children": {
+              "Role": {
+                "id": "Role",
+                "path": "RihaOrchestrationStack/RihaOubtPipelineStateMachine/Role",
+                "children": {
+                  "ImportRole": {
+                    "id": "ImportRole",
+                    "path": "RihaOrchestrationStack/RihaOubtPipelineStateMachine/Role/ImportRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.178.0",
+                      "metadata": []
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "RihaOrchestrationStack/RihaOubtPipelineStateMachine/Role/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "states.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.178.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "RihaOrchestrationStack/RihaOubtPipelineStateMachine/Role/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "RihaOrchestrationStack/RihaOubtPipelineStateMachine/Role/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "glue:StartJobRun",
+                                    "glue:GetJobRun",
+                                    "glue:GetJobRuns",
+                                    "glue:BatchStopJobRun"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":glue:us-east-1:",
+                                        {
+                                          "Ref": "AWS::AccountId"
+                                        },
+                                        ":job/01_validate_clean"
+                                      ]
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "glue:StartJobRun",
+                                    "glue:GetJobRun",
+                                    "glue:GetJobRuns",
+                                    "glue:BatchStopJobRun"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":glue:us-east-1:",
+                                        {
+                                          "Ref": "AWS::AccountId"
+                                        },
+                                        ":job/02_process_trips"
+                                      ]
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "glue:StartJobRun",
+                                    "glue:GetJobRun",
+                                    "glue:GetJobRuns",
+                                    "glue:BatchStopJobRun"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":glue:us-east-1:",
+                                        {
+                                          "Ref": "AWS::AccountId"
+                                        },
+                                        ":job/02b_create_golden_zones"
+                                      ]
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "glue:StartJobRun",
+                                    "glue:GetJobRun",
+                                    "glue:GetJobRuns",
+                                    "glue:BatchStopJobRun"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":glue:us-east-1:",
+                                        {
+                                          "Ref": "AWS::AccountId"
+                                        },
+                                        ":job/02c_create_golden_vendors"
+                                      ]
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "glue:StartJobRun",
+                                    "glue:GetJobRun",
+                                    "glue:GetJobRuns",
+                                    "glue:BatchStopJobRun"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":glue:us-east-1:",
+                                        {
+                                          "Ref": "AWS::AccountId"
+                                        },
+                                        ":job/03_scd2_zones"
+                                      ]
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "glue:StartJobRun",
+                                    "glue:GetJobRun",
+                                    "glue:GetJobRuns",
+                                    "glue:BatchStopJobRun"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":glue:us-east-1:",
+                                        {
+                                          "Ref": "AWS::AccountId"
+                                        },
+                                        ":job/03b_scd2_vendors"
+                                      ]
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "glue:StartJobRun",
+                                    "glue:GetJobRun",
+                                    "glue:GetJobRuns",
+                                    "glue:BatchStopJobRun"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":glue:us-east-1:",
+                                        {
+                                          "Ref": "AWS::AccountId"
+                                        },
+                                        ":job/04_fact_trips"
+                                      ]
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": "glue:startCrawler",
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                },
+                                {
+                                  "Action": "glue:getCrawler",
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                },
+                                {
+                                  "Action": [
+                                    "glue:StartJobRun",
+                                    "glue:GetJobRun",
+                                    "glue:GetJobRuns",
+                                    "glue:BatchStopJobRun"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":glue:us-east-1:",
+                                        {
+                                          "Ref": "AWS::AccountId"
+                                        },
+                                        ":job/05_redshift_load"
+                                      ]
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "glue:StartJobRun",
+                                    "glue:GetJobRun",
+                                    "glue:GetJobRuns",
+                                    "glue:BatchStopJobRun"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":glue:us-east-1:",
+                                        {
+                                          "Ref": "AWS::AccountId"
+                                        },
+                                        ":job/06_governance_metrics"
+                                      ]
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": [
+                                    "logs:CreateLogDelivery",
+                                    "logs:GetLogDelivery",
+                                    "logs:UpdateLogDelivery",
+                                    "logs:DeleteLogDelivery",
+                                    "logs:ListLogDeliveries",
+                                    "logs:PutResourcePolicy",
+                                    "logs:DescribeResourcePolicies",
+                                    "logs:DescribeLogGroups"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "RihaOubtPipelineStateMachineRoleDefaultPolicyCCF38C6D",
+                            "roles": [
+                              {
+                                "Ref": "RihaOubtPipelineStateMachineRole5B3C5EBF"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.178.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.178.0",
+                      "metadata": []
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.178.0",
+                  "metadata": []
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "RihaOrchestrationStack/RihaOubtPipelineStateMachine/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::StepFunctions::StateMachine",
+                  "aws:cdk:cloudformation:props": {
+                    "definitionString": {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "{\"StartAt\":\"Run01validateclean\",\"States\":{\"Run01validateclean\":{\"Next\":\"Run02processtrips\",\"Type\":\"Task\",\"Resource\":\"arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":states:::glue:startJobRun.sync\",\"Parameters\":{\"JobName\":\"01_validate_clean\",\"Timeout\":120}},\"Run02processtrips\":{\"Next\":\"Run02bcreategoldenzones\",\"Type\":\"Task\",\"Resource\":\"arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":states:::glue:startJobRun.sync\",\"Parameters\":{\"JobName\":\"02_process_trips\",\"Timeout\":120}},\"Run02bcreategoldenzones\":{\"Next\":\"Run02ccreategoldenvendors\",\"Type\":\"Task\",\"Resource\":\"arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":states:::glue:startJobRun.sync\",\"Parameters\":{\"JobName\":\"02b_create_golden_zones\",\"Timeout\":120}},\"Run02ccreategoldenvendors\":{\"Next\":\"Run03scd2zones\",\"Type\":\"Task\",\"Resource\":\"arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":states:::glue:startJobRun.sync\",\"Parameters\":{\"JobName\":\"02c_create_golden_vendors\",\"Timeout\":120}},\"Run03scd2zones\":{\"Next\":\"Run03bscd2vendors\",\"Type\":\"Task\",\"Resource\":\"arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":states:::glue:startJobRun.sync\",\"Parameters\":{\"JobName\":\"03_scd2_zones\",\"Timeout\":120}},\"Run03bscd2vendors\":{\"Next\":\"Run04facttrips\",\"Type\":\"Task\",\"Resource\":\"arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":states:::glue:startJobRun.sync\",\"Parameters\":{\"JobName\":\"03b_scd2_vendors\",\"Timeout\":120}},\"Run04facttrips\":{\"Next\":\"StartCuratedCrawler\",\"Type\":\"Task\",\"Resource\":\"arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":states:::glue:startJobRun.sync\",\"Parameters\":{\"JobName\":\"04_fact_trips\",\"Timeout\":120}},\"StartCuratedCrawler\":{\"Next\":\"WaitBeforePollingCrawler\",\"Type\":\"Task\",\"Resource\":\"arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":states:::aws-sdk:glue:startCrawler\",\"Parameters\":{\"Name\":\"rihaoubt-curated-crawler\"}},\"WaitBeforePollingCrawler\":{\"Type\":\"Wait\",\"Seconds\":30,\"Next\":\"GetCuratedCrawlerStatus\"},\"GetCuratedCrawlerStatus\":{\"Next\":\"CrawlerFinished?\",\"Type\":\"Task\",\"Resource\":\"arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":states:::aws-sdk:glue:getCrawler\",\"Parameters\":{\"Name\":\"rihaoubt-curated-crawler\"}},\"CrawlerFinished?\":{\"Type\":\"Choice\",\"Choices\":[{\"Variable\":\"$.Crawler.State\",\"StringEquals\":\"READY\",\"Next\":\"Run05redshiftload\"}],\"Default\":\"WaitBeforePollingCrawler\"},\"Run05redshiftload\":{\"Next\":\"Run06governancemetrics\",\"Type\":\"Task\",\"Resource\":\"arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":states:::glue:startJobRun.sync\",\"Parameters\":{\"JobName\":\"05_redshift_load\",\"Timeout\":120}},\"Run06governancemetrics\":{\"End\":true,\"Type\":\"Task\",\"Resource\":\"arn:",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          ":states:::glue:startJobRun.sync\",\"Parameters\":{\"JobName\":\"06_governance_metrics\",\"Timeout\":120}}},\"TimeoutSeconds\":21600}"
+                        ]
+                      ]
+                    },
+                    "loggingConfiguration": {
+                      "destinations": [
+                        {
+                          "cloudWatchLogsLogGroup": {
+                            "logGroupArn": {
+                              "Fn::GetAtt": [
+                                "PipelineStateMachineLogs7B9C1C22",
+                                "Arn"
+                              ]
+                            }
+                          }
+                        }
+                      ],
+                      "includeExecutionData": true,
+                      "level": "ALL"
+                    },
+                    "roleArn": {
+                      "Fn::GetAtt": [
+                        "RihaOubtPipelineStateMachineRole5B3C5EBF",
+                        "Arn"
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_stepfunctions.CfnStateMachine",
+                  "version": "2.178.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_stepfunctions.StateMachine",
+              "version": "2.178.0",
+              "metadata": []
+            }
+          },
+          "RihaOubtPipelineDashboard": {
+            "id": "RihaOubtPipelineDashboard",
+            "path": "RihaOrchestrationStack/RihaOubtPipelineDashboard",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::CloudWatch::Dashboard",
+              "aws:cdk:cloudformation:props": {
+                "dashboardBody": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "{\"widgets\": [{\"type\": \"metric\", \"x\": 0, \"y\": 0, \"width\": 12, \"height\": 6, \"properties\": {\"title\": \"Pipeline Executions\", \"metrics\": [[\"AWS/States\", \"ExecutionsStarted\", \"StateMachineArn\", \"",
+                      {
+                        "Ref": "RihaOubtPipelineStateMachine9EF4AEBE"
+                      },
+                      "\"], [\".\", \"ExecutionsSucceeded\", \".\", \".\"], [\".\", \"ExecutionsFailed\", \".\", \".\"]], \"stat\": \"Sum\", \"period\": 300, \"region\": \"us-east-1\"}}, {\"type\": \"metric\", \"x\": 12, \"y\": 0, \"width\": 12, \"height\": 6, \"properties\": {\"title\": \"Pipeline Duration (p95)\", \"metrics\": [[\"AWS/States\", \"ExecutionTime\", \"StateMachineArn\", \"",
+                      {
+                        "Ref": "RihaOubtPipelineStateMachine9EF4AEBE"
+                      },
+                      "\"]], \"stat\": \"p95\", \"period\": 300, \"region\": \"us-east-1\"}}]}"
+                    ]
+                  ]
+                },
+                "dashboardName": "RihaOrchestrationStack-pipeline-dashboard"
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudwatch.CfnDashboard",
+              "version": "2.178.0"
+            }
+          },
+          "PipelineFailureAlarm": {
+            "id": "PipelineFailureAlarm",
+            "path": "RihaOrchestrationStack/PipelineFailureAlarm",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "RihaOrchestrationStack/PipelineFailureAlarm/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudWatch::Alarm",
+                  "aws:cdk:cloudformation:props": {
+                    "alarmDescription": "Riha OUBT pipeline execution failed",
+                    "alarmName": "RihaOrchestrationStack-pipeline-failure",
+                    "comparisonOperator": "GreaterThanOrEqualToThreshold",
+                    "dimensions": [
+                      {
+                        "name": "StateMachineArn",
+                        "value": {
+                          "Ref": "RihaOubtPipelineStateMachine9EF4AEBE"
+                        }
+                      }
+                    ],
+                    "evaluationPeriods": 1,
+                    "metricName": "ExecutionsFailed",
+                    "namespace": "AWS/States",
+                    "period": 300,
+                    "statistic": "Sum",
+                    "threshold": 1,
+                    "treatMissingData": "notBreaching"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudwatch.CfnAlarm",
+                  "version": "2.178.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudwatch.Alarm",
+              "version": "2.178.0",
+              "metadata": []
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "RihaOrchestrationStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "RihaOrchestrationStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.178.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.5"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "RihaOrchestrationStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.178.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "RihaOrchestrationStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.178.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.178.0"
+        }
+      },
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.4.5"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.178.0"
+    }
+  }
+}

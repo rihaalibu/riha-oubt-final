@@ -1,0 +1,20 @@
+{
+  "version": "39.0.0",
+  "files": {
+    "da87a4901630e33e334c8ac60d35fa6baa0346f315af85135e7761c5b287dfab": {
+      "source": {
+        "path": "RihanaNetworkStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-us-east-1": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1",
+          "objectKey": "da87a4901630e33e334c8ac60d35fa6baa0346f315af85135e7761c5b287dfab.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-us-east-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

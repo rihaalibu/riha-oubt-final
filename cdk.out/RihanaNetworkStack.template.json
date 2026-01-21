@@ -1,0 +1,513 @@
+{
+ "Resources": {
+  "RihaVpc15A21ED3": {
+   "Type": "AWS::EC2::VPC",
+   "Properties": {
+    "CidrBlock": "10.0.0.0/16",
+    "EnableDnsHostnames": true,
+    "EnableDnsSupport": true,
+    "InstanceTenancy": "default",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "RihanaNetworkStack/RihaVpc"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/RihaVpc/Resource"
+   }
+  },
+  "RihaVpcpublicSubnet1Subnet6A70FFE3": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      0,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.0.0/18",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "RihanaNetworkStack/RihaVpc/publicSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "RihaVpc15A21ED3"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/RihaVpc/publicSubnet1/Subnet"
+   }
+  },
+  "RihaVpcpublicSubnet1RouteTable93BD0E16": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "RihanaNetworkStack/RihaVpc/publicSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "RihaVpc15A21ED3"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/RihaVpc/publicSubnet1/RouteTable"
+   }
+  },
+  "RihaVpcpublicSubnet1RouteTableAssociationE2426120": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "RihaVpcpublicSubnet1RouteTable93BD0E16"
+    },
+    "SubnetId": {
+     "Ref": "RihaVpcpublicSubnet1Subnet6A70FFE3"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/RihaVpc/publicSubnet1/RouteTableAssociation"
+   }
+  },
+  "RihaVpcpublicSubnet1DefaultRoute3F8C14BC": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "RihaVpcIGW9527F9D4"
+    },
+    "RouteTableId": {
+     "Ref": "RihaVpcpublicSubnet1RouteTable93BD0E16"
+    }
+   },
+   "DependsOn": [
+    "RihaVpcVPCGW2F16E7A8"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/RihaVpc/publicSubnet1/DefaultRoute"
+   }
+  },
+  "RihaVpcpublicSubnet1EIPB515F28C": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "RihanaNetworkStack/RihaVpc/publicSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/RihaVpc/publicSubnet1/EIP"
+   }
+  },
+  "RihaVpcpublicSubnet1NATGateway2BA74A35": {
+   "Type": "AWS::EC2::NatGateway",
+   "Properties": {
+    "AllocationId": {
+     "Fn::GetAtt": [
+      "RihaVpcpublicSubnet1EIPB515F28C",
+      "AllocationId"
+     ]
+    },
+    "SubnetId": {
+     "Ref": "RihaVpcpublicSubnet1Subnet6A70FFE3"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "RihanaNetworkStack/RihaVpc/publicSubnet1"
+     }
+    ]
+   },
+   "DependsOn": [
+    "RihaVpcpublicSubnet1DefaultRoute3F8C14BC",
+    "RihaVpcpublicSubnet1RouteTableAssociationE2426120"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/RihaVpc/publicSubnet1/NATGateway"
+   }
+  },
+  "RihaVpcpublicSubnet2Subnet67072C1B": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      1,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.64.0/18",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "RihanaNetworkStack/RihaVpc/publicSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "RihaVpc15A21ED3"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/RihaVpc/publicSubnet2/Subnet"
+   }
+  },
+  "RihaVpcpublicSubnet2RouteTable8B4F5045": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "RihanaNetworkStack/RihaVpc/publicSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "RihaVpc15A21ED3"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/RihaVpc/publicSubnet2/RouteTable"
+   }
+  },
+  "RihaVpcpublicSubnet2RouteTableAssociation92517743": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "RihaVpcpublicSubnet2RouteTable8B4F5045"
+    },
+    "SubnetId": {
+     "Ref": "RihaVpcpublicSubnet2Subnet67072C1B"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/RihaVpc/publicSubnet2/RouteTableAssociation"
+   }
+  },
+  "RihaVpcpublicSubnet2DefaultRouteDED9DB35": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "RihaVpcIGW9527F9D4"
+    },
+    "RouteTableId": {
+     "Ref": "RihaVpcpublicSubnet2RouteTable8B4F5045"
+    }
+   },
+   "DependsOn": [
+    "RihaVpcVPCGW2F16E7A8"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/RihaVpc/publicSubnet2/DefaultRoute"
+   }
+  },
+  "RihaVpcprivateSubnet1Subnet7053DAD3": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      0,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.128.0/18",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "RihanaNetworkStack/RihaVpc/privateSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "RihaVpc15A21ED3"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/RihaVpc/privateSubnet1/Subnet"
+   }
+  },
+  "RihaVpcprivateSubnet1RouteTable24A77CED": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "RihanaNetworkStack/RihaVpc/privateSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "RihaVpc15A21ED3"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/RihaVpc/privateSubnet1/RouteTable"
+   }
+  },
+  "RihaVpcprivateSubnet1RouteTableAssociation6F65B3F3": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "RihaVpcprivateSubnet1RouteTable24A77CED"
+    },
+    "SubnetId": {
+     "Ref": "RihaVpcprivateSubnet1Subnet7053DAD3"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/RihaVpc/privateSubnet1/RouteTableAssociation"
+   }
+  },
+  "RihaVpcprivateSubnet1DefaultRoute4BA559BD": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "RihaVpcpublicSubnet1NATGateway2BA74A35"
+    },
+    "RouteTableId": {
+     "Ref": "RihaVpcprivateSubnet1RouteTable24A77CED"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/RihaVpc/privateSubnet1/DefaultRoute"
+   }
+  },
+  "RihaVpcprivateSubnet2SubnetBBA59AD8": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": {
+     "Fn::Select": [
+      1,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "10.0.192.0/18",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "RihanaNetworkStack/RihaVpc/privateSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "RihaVpc15A21ED3"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/RihaVpc/privateSubnet2/Subnet"
+   }
+  },
+  "RihaVpcprivateSubnet2RouteTable06CACFB8": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "RihanaNetworkStack/RihaVpc/privateSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "RihaVpc15A21ED3"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/RihaVpc/privateSubnet2/RouteTable"
+   }
+  },
+  "RihaVpcprivateSubnet2RouteTableAssociation8E26939E": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "RihaVpcprivateSubnet2RouteTable06CACFB8"
+    },
+    "SubnetId": {
+     "Ref": "RihaVpcprivateSubnet2SubnetBBA59AD8"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/RihaVpc/privateSubnet2/RouteTableAssociation"
+   }
+  },
+  "RihaVpcprivateSubnet2DefaultRoute840646EE": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "RihaVpcpublicSubnet1NATGateway2BA74A35"
+    },
+    "RouteTableId": {
+     "Ref": "RihaVpcprivateSubnet2RouteTable06CACFB8"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/RihaVpc/privateSubnet2/DefaultRoute"
+   }
+  },
+  "RihaVpcIGW9527F9D4": {
+   "Type": "AWS::EC2::InternetGateway",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "RihanaNetworkStack/RihaVpc"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/RihaVpc/IGW"
+   }
+  },
+  "RihaVpcVPCGW2F16E7A8": {
+   "Type": "AWS::EC2::VPCGatewayAttachment",
+   "Properties": {
+    "InternetGatewayId": {
+     "Ref": "RihaVpcIGW9527F9D4"
+    },
+    "VpcId": {
+     "Ref": "RihaVpc15A21ED3"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/RihaVpc/VPCGW"
+   }
+  },
+  "RedshiftSG19E35DFC": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Redshift Serverless security group",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "RihaVpc15A21ED3"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/RedshiftSG/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02OwQrCMBBEv8V7GrUKehWR4kVCK15lu6642iYl2ViK+O9SFetpZh7DMKmeLpZ6MoI2JHi6JRWX+lEI4E1BG46EqX4cGlTrsz2YtTKxrBiLWFqSng0ud1FoD2VFAx/YKgSHDMLO/sq92WxNLzuQDIRa6JTxfAehYXhrhbylX+Hz5JtWIoCXmqyogjB6li7zLjbvD//gqXIKLnqkpzKdXJwdz/R0rtPRNTAnPlrhmnT+0RcE9lqOFgEAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihanaNetworkStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "ExportsOutputFnGetAttRedshiftSG19E35DFCGroupId3712FAAE": {
+   "Value": {
+    "Fn::GetAtt": [
+     "RedshiftSG19E35DFC",
+     "GroupId"
+    ]
+   },
+   "Export": {
+    "Name": "RihanaNetworkStack:ExportsOutputFnGetAttRedshiftSG19E35DFCGroupId3712FAAE"
+   }
+  },
+  "ExportsOutputRefRihaVpcprivateSubnet1Subnet7053DAD33EC2B729": {
+   "Value": {
+    "Ref": "RihaVpcprivateSubnet1Subnet7053DAD3"
+   },
+   "Export": {
+    "Name": "RihanaNetworkStack:ExportsOutputRefRihaVpcprivateSubnet1Subnet7053DAD33EC2B729"
+   }
+  },
+  "ExportsOutputRefRihaVpcprivateSubnet2SubnetBBA59AD86B1C20D4": {
+   "Value": {
+    "Ref": "RihaVpcprivateSubnet2SubnetBBA59AD8"
+   },
+   "Export": {
+    "Name": "RihanaNetworkStack:ExportsOutputRefRihaVpcprivateSubnet2SubnetBBA59AD86B1C20D4"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

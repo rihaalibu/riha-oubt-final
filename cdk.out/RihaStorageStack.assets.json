@@ -1,0 +1,20 @@
+{
+  "version": "39.0.0",
+  "files": {
+    "667c7cfe9f11bf33a369df6e8742e921d6c435981fc574b7f564760bf5f1b690": {
+      "source": {
+        "path": "RihaStorageStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-us-east-1": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1",
+          "objectKey": "667c7cfe9f11bf33a369df6e8742e921d6c435981fc574b7f564760bf5f1b690.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-us-east-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

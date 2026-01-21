@@ -1,0 +1,70 @@
+name: CDK + Glue Deploy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+
+permissions:
+  id-token: write     
+  contents: read      
+
+env:
+  AWS_REGION: us-east-1
+  GLUE_SCRIPTS_BUCKET: rihastoragestack-s3datalakee27c7386-ukc8jklwd0uj
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+
+      - name: Install dependencies
+        run: |
+          pip install -r cdk/requirements.txt
+          npm install -g aws-cdk
+
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::224861414677:role/cdk-github-deploy-role
+          aws-region: ${{ env.AWS_REGION }}
+
+
+      - name: Verify AWS identity
+        run: aws sts get-caller-identity
+
+
+      - name: Run tests
+        run: |
+          pytest tests/ || echo "No tests yet"
+
+
+      - name: CDK synth
+        run: |
+          cdk synth
+
+
+      - name: CDK deploy
+        run: |          
+          cdk deploy --all --require-approval never
+
+
+      - name: Upload Glue scripts to S3
+        run: |
+          aws s3 sync glue/ s3://${GLUE_SCRIPTS_BUCKET}/scripts/ \
+            --delete \
+            --exact-timestamps

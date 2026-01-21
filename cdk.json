@@ -1,0 +1,9 @@
+{
+  "app": "python app.py",
+  "context": {
+    "projectName": "RihaOubtAnalysis",
+    "bucketName": "riha-oubt-analysis-bucket",
+    "region": "us-east-1",
+    "enableNatGateway": true
+  }
+}

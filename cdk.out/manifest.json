@@ -1,0 +1,649 @@
+{
+  "version": "39.0.0",
+  "artifacts": {
+    "RihanaNetworkStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "RihanaNetworkStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "RihanaNetworkStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/us-east-1",
+      "properties": {
+        "templateFile": "RihanaNetworkStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1/da87a4901630e33e334c8ac60d35fa6baa0346f315af85135e7761c5b287dfab.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "RihanaNetworkStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-us-east-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "RihanaNetworkStack.assets"
+      ],
+      "metadata": {
+        "/RihanaNetworkStack/RihaVpc/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaVpc15A21ED3"
+          }
+        ],
+        "/RihanaNetworkStack/RihaVpc/publicSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaVpcpublicSubnet1Subnet6A70FFE3"
+          }
+        ],
+        "/RihanaNetworkStack/RihaVpc/publicSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaVpcpublicSubnet1RouteTable93BD0E16"
+          }
+        ],
+        "/RihanaNetworkStack/RihaVpc/publicSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaVpcpublicSubnet1RouteTableAssociationE2426120"
+          }
+        ],
+        "/RihanaNetworkStack/RihaVpc/publicSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaVpcpublicSubnet1DefaultRoute3F8C14BC"
+          }
+        ],
+        "/RihanaNetworkStack/RihaVpc/publicSubnet1/EIP": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaVpcpublicSubnet1EIPB515F28C"
+          }
+        ],
+        "/RihanaNetworkStack/RihaVpc/publicSubnet1/NATGateway": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaVpcpublicSubnet1NATGateway2BA74A35"
+          }
+        ],
+        "/RihanaNetworkStack/RihaVpc/publicSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaVpcpublicSubnet2Subnet67072C1B"
+          }
+        ],
+        "/RihanaNetworkStack/RihaVpc/publicSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaVpcpublicSubnet2RouteTable8B4F5045"
+          }
+        ],
+        "/RihanaNetworkStack/RihaVpc/publicSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaVpcpublicSubnet2RouteTableAssociation92517743"
+          }
+        ],
+        "/RihanaNetworkStack/RihaVpc/publicSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaVpcpublicSubnet2DefaultRouteDED9DB35"
+          }
+        ],
+        "/RihanaNetworkStack/RihaVpc/privateSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaVpcprivateSubnet1Subnet7053DAD3"
+          }
+        ],
+        "/RihanaNetworkStack/RihaVpc/privateSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaVpcprivateSubnet1RouteTable24A77CED"
+          }
+        ],
+        "/RihanaNetworkStack/RihaVpc/privateSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaVpcprivateSubnet1RouteTableAssociation6F65B3F3"
+          }
+        ],
+        "/RihanaNetworkStack/RihaVpc/privateSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaVpcprivateSubnet1DefaultRoute4BA559BD"
+          }
+        ],
+        "/RihanaNetworkStack/RihaVpc/privateSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaVpcprivateSubnet2SubnetBBA59AD8"
+          }
+        ],
+        "/RihanaNetworkStack/RihaVpc/privateSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaVpcprivateSubnet2RouteTable06CACFB8"
+          }
+        ],
+        "/RihanaNetworkStack/RihaVpc/privateSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaVpcprivateSubnet2RouteTableAssociation8E26939E"
+          }
+        ],
+        "/RihanaNetworkStack/RihaVpc/privateSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaVpcprivateSubnet2DefaultRoute840646EE"
+          }
+        ],
+        "/RihanaNetworkStack/RihaVpc/IGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaVpcIGW9527F9D4"
+          }
+        ],
+        "/RihanaNetworkStack/RihaVpc/VPCGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaVpcVPCGW2F16E7A8"
+          }
+        ],
+        "/RihanaNetworkStack/RedshiftSG/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RedshiftSG19E35DFC"
+          }
+        ],
+        "/RihanaNetworkStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/RihanaNetworkStack/Exports/Output{\"Fn::GetAtt\":[\"RedshiftSG19E35DFC\",\"GroupId\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttRedshiftSG19E35DFCGroupId3712FAAE"
+          }
+        ],
+        "/RihanaNetworkStack/Exports/Output{\"Ref\":\"RihaVpcprivateSubnet1Subnet7053DAD3\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefRihaVpcprivateSubnet1Subnet7053DAD33EC2B729"
+          }
+        ],
+        "/RihanaNetworkStack/Exports/Output{\"Ref\":\"RihaVpcprivateSubnet2SubnetBBA59AD8\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefRihaVpcprivateSubnet2SubnetBBA59AD86B1C20D4"
+          }
+        ],
+        "/RihanaNetworkStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/RihanaNetworkStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "RihanaNetworkStack"
+    },
+    "RihaStorageStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "RihaStorageStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "RihaStorageStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/us-east-1",
+      "properties": {
+        "templateFile": "RihaStorageStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1/667c7cfe9f11bf33a369df6e8742e921d6c435981fc574b7f564760bf5f1b690.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "RihaStorageStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-us-east-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "RihaStorageStack.assets"
+      ],
+      "metadata": {
+        "/RihaStorageStack/Kms/DataKey/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KmsDataKeyCF9D86DB"
+          }
+        ],
+        "/RihaStorageStack/Kms/DataKey/Alias/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KmsDataKeyAlias4BB86143"
+          }
+        ],
+        "/RihaStorageStack/Kms/RihaDataKeyArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KmsRihaDataKeyArnB7B9BB66"
+          }
+        ],
+        "/RihaStorageStack/S3/DataLake/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "S3DataLakeE27C7386"
+          }
+        ],
+        "/RihaStorageStack/S3/DataLake/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "S3DataLakePolicy0EFEB313"
+          }
+        ],
+        "/RihaStorageStack/RihaDataLakeKmsKeyArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaDataLakeKmsKeyArn"
+          }
+        ],
+        "/RihaStorageStack/RihaDataLakeBucketName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaDataLakeBucketName"
+          }
+        ],
+        "/RihaStorageStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/RihaStorageStack/Exports/Output{\"Fn::GetAtt\":[\"S3DataLakeE27C7386\",\"Arn\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttS3DataLakeE27C7386Arn6E30F4A0"
+          }
+        ],
+        "/RihaStorageStack/Exports/Output{\"Fn::GetAtt\":[\"KmsDataKeyCF9D86DB\",\"Arn\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttKmsDataKeyCF9D86DBArnEB4E544D"
+          }
+        ],
+        "/RihaStorageStack/Exports/Output{\"Ref\":\"S3DataLakeE27C7386\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+          }
+        ],
+        "/RihaStorageStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/RihaStorageStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "RihaStorageStack"
+    },
+    "RihaRedshiftServerlessStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "RihaRedshiftServerlessStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "RihaRedshiftServerlessStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/us-east-1",
+      "properties": {
+        "templateFile": "RihaRedshiftServerlessStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1/f03e90a568367552886afb602e73d3c3f150080d4bd00e0bfb49386d40517ab9.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "RihaRedshiftServerlessStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-us-east-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "RihanaNetworkStack",
+        "RihaRedshiftServerlessStack.assets"
+      ],
+      "metadata": {
+        "/RihaRedshiftServerlessStack/RedshiftServerlessRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RedshiftServerlessRoleD124E238"
+          }
+        ],
+        "/RihaRedshiftServerlessStack/RedshiftServerlessRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RedshiftServerlessRoleDefaultPolicyE3B556A2"
+          }
+        ],
+        "/RihaRedshiftServerlessStack/RedshiftNamespace": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RedshiftNamespace"
+          }
+        ],
+        "/RihaRedshiftServerlessStack/RedshiftWorkgroup": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RedshiftWorkgroup"
+          }
+        ],
+        "/RihaRedshiftServerlessStack/RedshiftIamRoleArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RedshiftIamRoleArn"
+          }
+        ],
+        "/RihaRedshiftServerlessStack/RedshiftWorkgroupName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RedshiftWorkgroupName"
+          }
+        ],
+        "/RihaRedshiftServerlessStack/RedshiftDatabaseName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RedshiftDatabaseName"
+          }
+        ],
+        "/RihaRedshiftServerlessStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/RihaRedshiftServerlessStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/RihaRedshiftServerlessStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "RihaRedshiftServerlessStack"
+    },
+    "RihaGlueStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "RihaGlueStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "RihaGlueStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/us-east-1",
+      "properties": {
+        "templateFile": "RihaGlueStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1/f7d69a55533011567eb0c089d1bd1b3cdca5c1a4ccd5bcde8a0cd37fff82cdb5.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "RihaGlueStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-us-east-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "RihaStorageStack",
+        "RihaGlueStack.assets"
+      ],
+      "metadata": {
+        "/RihaGlueStack/RihaCuratedDb": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaCuratedDb"
+          }
+        ],
+        "/RihaGlueStack/RihaGluePipeline/GlueExecutionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaGluePipelineGlueExecutionRole584B293F"
+          }
+        ],
+        "/RihaGlueStack/RihaGluePipeline/GlueExecutionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaGluePipelineGlueExecutionRoleDefaultPolicy585C6892"
+          }
+        ],
+        "/RihaGlueStack/RihaGluePipeline/Job01validateclean": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaGluePipelineJob01validateclean4180C261"
+          }
+        ],
+        "/RihaGlueStack/RihaGluePipeline/Job02processtrips": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaGluePipelineJob02processtrips8B07056D"
+          }
+        ],
+        "/RihaGlueStack/RihaGluePipeline/Job02bcreategoldenzones": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaGluePipelineJob02bcreategoldenzones1CAFE7A8"
+          }
+        ],
+        "/RihaGlueStack/RihaGluePipeline/Job02ccreategoldenvendors": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaGluePipelineJob02ccreategoldenvendors3DE04D2D"
+          }
+        ],
+        "/RihaGlueStack/RihaGluePipeline/Job03scd2zones": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaGluePipelineJob03scd2zones5EF10BA2"
+          }
+        ],
+        "/RihaGlueStack/RihaGluePipeline/Job03bscd2vendors": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaGluePipelineJob03bscd2vendorsA375418B"
+          }
+        ],
+        "/RihaGlueStack/RihaGluePipeline/Job04facttrips": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaGluePipelineJob04facttripsCACAE94C"
+          }
+        ],
+        "/RihaGlueStack/RihaGluePipeline/Job05redshiftload": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaGluePipelineJob05redshiftloadB9F050EF"
+          }
+        ],
+        "/RihaGlueStack/RihaGluePipeline/Job06governancemetrics": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaGluePipelineJob06governancemetricsF0926E1C"
+          }
+        ],
+        "/RihaGlueStack/RihaGluePipeline/CuratedCrawler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaGluePipelineCuratedCrawler69595D57"
+          }
+        ],
+        "/RihaGlueStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/RihaGlueStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/RihaGlueStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "RihaGlueStack"
+    },
+    "RihaOrchestrationStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "RihaOrchestrationStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "RihaOrchestrationStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/us-east-1",
+      "properties": {
+        "templateFile": "RihaOrchestrationStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1/a36b6e2f3c429bb1c2d800a73c813978fba539d0bbff5e5fb925f070b3560c19.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "RihaOrchestrationStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-us-east-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "RihaOrchestrationStack.assets"
+      ],
+      "metadata": {
+        "/RihaOrchestrationStack/PipelineStateMachineLogs/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineStateMachineLogs7B9C1C22"
+          }
+        ],
+        "/RihaOrchestrationStack/RihaOubtPipelineStateMachine/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaOubtPipelineStateMachineRole5B3C5EBF"
+          }
+        ],
+        "/RihaOrchestrationStack/RihaOubtPipelineStateMachine/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaOubtPipelineStateMachineRoleDefaultPolicyCCF38C6D"
+          }
+        ],
+        "/RihaOrchestrationStack/RihaOubtPipelineStateMachine/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaOubtPipelineStateMachine9EF4AEBE"
+          }
+        ],
+        "/RihaOrchestrationStack/RihaOubtPipelineDashboard": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RihaOubtPipelineDashboard"
+          }
+        ],
+        "/RihaOrchestrationStack/PipelineFailureAlarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineFailureAlarm20CC1062"
+          }
+        ],
+        "/RihaOrchestrationStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/RihaOrchestrationStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/RihaOrchestrationStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "RihaOrchestrationStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}

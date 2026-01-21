@@ -1,0 +1,465 @@
+Resources:
+  KmsDataKeyCF9D86DB:
+    Type: AWS::KMS::Key
+    Properties:
+      EnableKeyRotation: true
+      KeyPolicy:
+        Statement:
+          - Action: kms:*
+            Effect: Allow
+            Principal:
+              AWS:
+                Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - ":iam::"
+                    - Ref: AWS::AccountId
+                    - :root
+            Resource: "*"
+          - Action:
+              - kms:Encrypt
+              - kms:Decrypt
+              - kms:GenerateDataKey
+              - kms:DescribeKey
+            Effect: Allow
+            Principal:
+              Service:
+                - redshift.amazonaws.com
+                - redshift-serverless.amazonaws.com
+            Resource:
+              Fn::GetAtt:
+                - KmsDataKeyCF9D86DB
+                - Arn
+        Version: "2012-10-17"
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: RihaStorageStack/Kms/DataKey/Resource
+  KmsDataKeyAlias4BB86143:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: alias/riha-data
+      TargetKeyId:
+        Fn::GetAtt:
+          - KmsDataKeyCF9D86DB
+          - Arn
+    Metadata:
+      aws:cdk:path: RihaStorageStack/Kms/DataKey/Alias/Resource
+  S3DataLakeE27C7386:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              KMSMasterKeyID:
+                Fn::GetAtt:
+                  - KmsDataKeyCF9D86DB
+                  - Arn
+              SSEAlgorithm: aws:kms
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      Tags:
+        - Key: aws-cdk:cr-owned:scripts:f068ba62
+          Value: "true"
+      VersioningConfiguration:
+        Status: Enabled
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: RihaStorageStack/S3/DataLake/Resource
+  S3DataLakePolicy0EFEB313:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: S3DataLakeE27C7386
+      PolicyDocument:
+        Statement:
+          - Action: s3:*
+            Condition:
+              Bool:
+                aws:SecureTransport: "false"
+            Effect: Deny
+            Principal:
+              AWS: "*"
+            Resource:
+              - Fn::GetAtt:
+                  - S3DataLakeE27C7386
+                  - Arn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - S3DataLakeE27C7386
+                        - Arn
+                    - /*
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: RihaStorageStack/S3/DataLake/Policy/Resource
+  FolderMarkerFnServiceRole3DFA8102:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: RihaStorageStack/FolderMarkerFn/ServiceRole/Resource
+  FolderMarkerFnServiceRoleDefaultPolicy69BF360F:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - s3:GetObject*
+              - s3:GetBucket*
+              - s3:List*
+              - s3:DeleteObject*
+              - s3:PutObject
+              - s3:PutObjectLegalHold
+              - s3:PutObjectRetention
+              - s3:PutObjectTagging
+              - s3:PutObjectVersionTagging
+              - s3:Abort*
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - S3DataLakeE27C7386
+                  - Arn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - S3DataLakeE27C7386
+                        - Arn
+                    - /*
+          - Action:
+              - kms:Decrypt
+              - kms:DescribeKey
+              - kms:Encrypt
+              - kms:ReEncrypt*
+              - kms:GenerateDataKey*
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - KmsDataKeyCF9D86DB
+                - Arn
+        Version: "2012-10-17"
+      PolicyName: FolderMarkerFnServiceRoleDefaultPolicy69BF360F
+      Roles:
+        - Ref: FolderMarkerFnServiceRole3DFA8102
+    Metadata:
+      aws:cdk:path: RihaStorageStack/FolderMarkerFn/ServiceRole/DefaultPolicy/Resource
+  FolderMarkerFn9C00F6A2:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: 8b42b0da150f78b19e3b8b5e111fb518b99357d3dc824cecada8774912d6c928.zip
+      Handler: index.handler
+      Role:
+        Fn::GetAtt:
+          - FolderMarkerFnServiceRole3DFA8102
+          - Arn
+      Runtime: python3.11
+      Timeout: 60
+    DependsOn:
+      - FolderMarkerFnServiceRoleDefaultPolicy69BF360F
+      - FolderMarkerFnServiceRole3DFA8102
+    Metadata:
+      aws:cdk:path: RihaStorageStack/FolderMarkerFn/Resource
+      aws:asset:path: asset.8b42b0da150f78b19e3b8b5e111fb518b99357d3dc824cecada8774912d6c928
+      aws:asset:is-bundled: false
+      aws:asset:property: Code
+  FolderMarkerProviderframeworkonEventServiceRoleE7125ED9:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: RihaStorageStack/FolderMarkerProvider/framework-onEvent/ServiceRole/Resource
+  FolderMarkerProviderframeworkonEventServiceRoleDefaultPolicy7E606C7B:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: lambda:InvokeFunction
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - FolderMarkerFn9C00F6A2
+                  - Arn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - FolderMarkerFn9C00F6A2
+                        - Arn
+                    - :*
+        Version: "2012-10-17"
+      PolicyName: FolderMarkerProviderframeworkonEventServiceRoleDefaultPolicy7E606C7B
+      Roles:
+        - Ref: FolderMarkerProviderframeworkonEventServiceRoleE7125ED9
+    Metadata:
+      aws:cdk:path: RihaStorageStack/FolderMarkerProvider/framework-onEvent/ServiceRole/DefaultPolicy/Resource
+  FolderMarkerProviderframeworkonEvent2763BBB7:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: bdc104ed9cab1b5b6421713c8155f0b753380595356f710400609664d3635eca.zip
+      Description: AWS CDK resource provider framework - onEvent (RihaStorageStack/FolderMarkerProvider)
+      Environment:
+        Variables:
+          USER_ON_EVENT_FUNCTION_ARN:
+            Fn::GetAtt:
+              - FolderMarkerFn9C00F6A2
+              - Arn
+      Handler: framework.onEvent
+      Role:
+        Fn::GetAtt:
+          - FolderMarkerProviderframeworkonEventServiceRoleE7125ED9
+          - Arn
+      Runtime: nodejs20.x
+      Timeout: 900
+    DependsOn:
+      - FolderMarkerProviderframeworkonEventServiceRoleDefaultPolicy7E606C7B
+      - FolderMarkerProviderframeworkonEventServiceRoleE7125ED9
+    Metadata:
+      aws:cdk:path: RihaStorageStack/FolderMarkerProvider/framework-onEvent/Resource
+      aws:asset:path: asset.bdc104ed9cab1b5b6421713c8155f0b753380595356f710400609664d3635eca
+      aws:asset:is-bundled: false
+      aws:asset:property: Code
+  CreateFolderMarkers:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - FolderMarkerProviderframeworkonEvent2763BBB7
+          - Arn
+      Bucket:
+        Ref: S3DataLakeE27C7386
+      Prefixes:
+        - raw/
+        - validated/nyc_taxi/
+        - processed/nyc_taxi/
+        - master/zones/source/
+        - master/vendors/
+        - scd2/dim_zones/
+        - scd2/dim_vendors/
+        - curated/
+        - audit/
+        - quarantine/
+        - backup/
+        - scripts/
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: RihaStorageStack/CreateFolderMarkers/Default
+  DeployGlueScriptsAwsCliLayerB02EE12E:
+    Type: AWS::Lambda::LayerVersion
+    Properties:
+      Content:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: c82567645316e1499ecd064c937f1183bb4a74e95800ff64fab4d308451ba5f0.zip
+      Description: /opt/awscli/aws
+    Metadata:
+      aws:cdk:path: RihaStorageStack/DeployGlueScripts/AwsCliLayer/Resource
+      aws:asset:path: asset.c82567645316e1499ecd064c937f1183bb4a74e95800ff64fab4d308451ba5f0.zip
+      aws:asset:is-bundled: false
+      aws:asset:property: Content
+  DeployGlueScriptsCustomResourceEBEAB663:
+    Type: Custom::CDKBucketDeployment
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536
+          - Arn
+      SourceBucketNames:
+        - Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+      SourceObjectKeys:
+        - 6fa3dd7ff182eb76443c737ef640a1f92298a28a876cb0317dc69adb20f8f1dd.zip
+      DestinationBucketName:
+        Ref: S3DataLakeE27C7386
+      DestinationBucketKeyPrefix: scripts
+      Prune: true
+      OutputObjectKeys: true
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: RihaStorageStack/DeployGlueScripts/CustomResource/Default
+  CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: RihaStorageStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/Resource
+  CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - s3:GetObject*
+              - s3:GetBucket*
+              - s3:List*
+            Effect: Allow
+            Resource:
+              - Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - ":s3:::"
+                    - Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+              - Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - ":s3:::"
+                    - Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+                    - /*
+          - Action:
+              - s3:GetObject*
+              - s3:GetBucket*
+              - s3:List*
+              - s3:DeleteObject*
+              - s3:PutObject
+              - s3:PutObjectLegalHold
+              - s3:PutObjectRetention
+              - s3:PutObjectTagging
+              - s3:PutObjectVersionTagging
+              - s3:Abort*
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - S3DataLakeE27C7386
+                  - Arn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - S3DataLakeE27C7386
+                        - Arn
+                    - /*
+          - Action:
+              - kms:Decrypt
+              - kms:DescribeKey
+              - kms:Encrypt
+              - kms:ReEncrypt*
+              - kms:GenerateDataKey*
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - KmsDataKeyCF9D86DB
+                - Arn
+        Version: "2012-10-17"
+      PolicyName: CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF
+      Roles:
+        - Ref: CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265
+    Metadata:
+      aws:cdk:path: RihaStorageStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/DefaultPolicy/Resource
+  CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: c6358465bf49dfae556bb430bf9c81fa578c221b82c308e3707901b1dd654762.zip
+      Environment:
+        Variables:
+          AWS_CA_BUNDLE: /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+      Handler: index.handler
+      Layers:
+        - Ref: DeployGlueScriptsAwsCliLayerB02EE12E
+      Role:
+        Fn::GetAtt:
+          - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265
+          - Arn
+      Runtime: python3.11
+      Timeout: 900
+    DependsOn:
+      - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF
+      - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265
+    Metadata:
+      aws:cdk:path: RihaStorageStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Resource
+      aws:asset:path: asset.c6358465bf49dfae556bb430bf9c81fa578c221b82c308e3707901b1dd654762
+      aws:asset:is-bundled: false
+      aws:asset:property: Code
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Analytics: v2:deflate64:H4sIAAAAAAAA/01QS0/DMAz+LbtnhtHDuHZFXECi6iSuVZaaLTSPKU6Yqqj/naYpHafvYVv+7CfY7Z/hccNvtBVdv1XyBPHouejZZLWx1wTxDQdWfZkEpZKckpjJyKiAeAiiR5/MhWWorZJiuNuLzuLACUemuD51HOJrMMJLa1Lzf/7OB3Sf6CjpozRnhd6uHSOTXENsrMLUPON9aWYpYRs5EXqCMgHr8KrsoNF4yFleVmMc0+RH8NfgWYNkgxPI5rHpJ+cpABOBvNWtW4oEtbM/skPHqrmyTqVEfzzf2ap0Tjv9VSgJ5Y0qJecLR1YP/mLNQwG7Avabb5Jy64LxUiM0GX8B1YT+KakBAAA=
+    Metadata:
+      aws:cdk:path: RihaStorageStack/CDKMetadata/Default
+Outputs:
+  RihaDataLakeKmsKeyArn:
+    Value:
+      Fn::GetAtt:
+        - KmsDataKeyCF9D86DB
+        - Arn
+    Export:
+      Name: RihaStorageStack:KmsKeyArn
+  RihaDataLakeBucketName:
+    Value:
+      Ref: S3DataLakeE27C7386
+    Export:
+      Name: RihaStorageStack:BucketName
+  ExportsOutputFnGetAttS3DataLakeE27C7386Arn6E30F4A0:
+    Value:
+      Fn::GetAtt:
+        - S3DataLakeE27C7386
+        - Arn
+    Export:
+      Name: RihaStorageStack:ExportsOutputFnGetAttS3DataLakeE27C7386Arn6E30F4A0
+  ExportsOutputFnGetAttKmsDataKeyCF9D86DBArnEB4E544D:
+    Value:
+      Fn::GetAtt:
+        - KmsDataKeyCF9D86DB
+        - Arn
+    Export:
+      Name: RihaStorageStack:ExportsOutputFnGetAttKmsDataKeyCF9D86DBArnEB4E544D
+  ExportsOutputRefS3DataLakeE27C73864B4EADC5:
+    Value:
+      Ref: S3DataLakeE27C7386
+    Export:
+      Name: RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5
+Parameters:
+  BootstrapVersion:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /cdk-bootstrap/hnb659fds/version
+    Description: Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]
+

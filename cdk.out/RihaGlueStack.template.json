@@ -1,0 +1,823 @@
+{
+ "Resources": {
+  "RihaCuratedDb": {
+   "Type": "AWS::Glue::Database",
+   "Properties": {
+    "CatalogId": {
+     "Ref": "AWS::AccountId"
+    },
+    "DatabaseInput": {
+     "Name": "rihagluestack_curated_db"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihaGlueStack/RihaCuratedDb"
+   }
+  },
+  "RihaGluePipelineGlueExecutionRole584B293F": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "glue.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSGlueServiceRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihaGlueStack/RihaGluePipeline/GlueExecutionRole/Resource"
+   }
+  },
+  "RihaGluePipelineGlueExecutionRoleDefaultPolicy585C6892": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "redshift-data:ExecuteStatement",
+        "redshift-data:DescribeStatement",
+        "redshift-data:GetStatementResult",
+        "redshift-serverless:GetWorkgroup",
+        "redshift-serverless:GetNamespace",
+        "glue:GetDatabase",
+        "glue:GetDatabases",
+        "glue:GetTable",
+        "glue:GetTables"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "s3:GetObject*",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:DeleteObject*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging",
+        "s3:Abort*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::ImportValue": "RihaStorageStack:ExportsOutputFnGetAttS3DataLakeE27C7386Arn6E30F4A0"
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::ImportValue": "RihaStorageStack:ExportsOutputFnGetAttS3DataLakeE27C7386Arn6E30F4A0"
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "kms:Decrypt",
+        "kms:DescribeKey",
+        "kms:Encrypt",
+        "kms:ReEncrypt*",
+        "kms:GenerateDataKey*"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::ImportValue": "RihaStorageStack:ExportsOutputFnGetAttKmsDataKeyCF9D86DBArnEB4E544D"
+       }
+      },
+      {
+       "Action": [
+        "kms:Decrypt",
+        "kms:Encrypt",
+        "kms:ReEncrypt*",
+        "kms:GenerateDataKey*"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::ImportValue": "RihaDataLakeKmsKeyArn:KmsKeyArn"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "RihaGluePipelineGlueExecutionRoleDefaultPolicy585C6892",
+    "Roles": [
+     {
+      "Ref": "RihaGluePipelineGlueExecutionRole584B293F"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihaGlueStack/RihaGluePipeline/GlueExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "RihaGluePipelineJob01validateclean4180C261": {
+   "Type": "AWS::Glue::Job",
+   "Properties": {
+    "Command": {
+     "Name": "glueetl",
+     "PythonVersion": "3",
+     "ScriptLocation": {
+      "Fn::Join": [
+       "",
+       [
+        "s3://",
+        {
+         "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+        },
+        "/scripts/01_validate_clean.py"
+       ]
+      ]
+     }
+    },
+    "DefaultArguments": {
+     "--BUCKET": {
+      "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+     },
+     "--RAW_PREFIX": "raw/",
+     "--VALIDATED_PREFIX": "validated/",
+     "--PROCESSED_PREFIX": "processed/",
+     "--MASTER_PREFIX": "master/",
+     "--SCD2_PREFIX": "scd2/",
+     "--CURATED_PREFIX": "curated/curated_trips",
+     "--AUDIT_PREFIX": "audit/",
+     "--QUARANTINE_PREFIX": "quarantine/",
+     "--BACKUP_PREFIX": "backup/",
+     "--job-bookmark-option": "job-bookmark-disable",
+     "--enable-continuous-cloudwatch-log": "true",
+     "--enable-metrics": "true",
+     "--datalake-formats": "delta",
+     "--conf": "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension ",
+     "--conf1": "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog",
+     "--REDSHIFT_WORKGROUP": {
+      "Fn::ImportValue": "RedshiftWorkgroupName"
+     },
+     "--REDSHIFT_DB": {
+      "Fn::ImportValue": "RedshiftDatabaseName"
+     },
+     "--REDSHIFT_IAM_ROLE_ARN": {
+      "Fn::ImportValue": "RedshiftIamRoleArn"
+     },
+     "--GLUE_CATALOG_DB": {
+      "Ref": "RihaCuratedDb"
+     }
+    },
+    "GlueVersion": "4.0",
+    "Name": "01_validate_clean",
+    "NumberOfWorkers": 5,
+    "Role": {
+     "Fn::GetAtt": [
+      "RihaGluePipelineGlueExecutionRole584B293F",
+      "Arn"
+     ]
+    },
+    "WorkerType": "G.1X"
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihaGlueStack/RihaGluePipeline/Job01validateclean"
+   }
+  },
+  "RihaGluePipelineJob02processtrips8B07056D": {
+   "Type": "AWS::Glue::Job",
+   "Properties": {
+    "Command": {
+     "Name": "glueetl",
+     "PythonVersion": "3",
+     "ScriptLocation": {
+      "Fn::Join": [
+       "",
+       [
+        "s3://",
+        {
+         "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+        },
+        "/scripts/02_process_trips.py"
+       ]
+      ]
+     }
+    },
+    "DefaultArguments": {
+     "--BUCKET": {
+      "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+     },
+     "--RAW_PREFIX": "raw/",
+     "--VALIDATED_PREFIX": "validated/",
+     "--PROCESSED_PREFIX": "processed/",
+     "--MASTER_PREFIX": "master/",
+     "--SCD2_PREFIX": "scd2/",
+     "--CURATED_PREFIX": "curated/curated_trips",
+     "--AUDIT_PREFIX": "audit/",
+     "--QUARANTINE_PREFIX": "quarantine/",
+     "--BACKUP_PREFIX": "backup/",
+     "--job-bookmark-option": "job-bookmark-disable",
+     "--enable-continuous-cloudwatch-log": "true",
+     "--enable-metrics": "true",
+     "--datalake-formats": "delta",
+     "--conf": "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension ",
+     "--conf1": "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog",
+     "--REDSHIFT_WORKGROUP": {
+      "Fn::ImportValue": "RedshiftWorkgroupName"
+     },
+     "--REDSHIFT_DB": {
+      "Fn::ImportValue": "RedshiftDatabaseName"
+     },
+     "--REDSHIFT_IAM_ROLE_ARN": {
+      "Fn::ImportValue": "RedshiftIamRoleArn"
+     },
+     "--GLUE_CATALOG_DB": {
+      "Ref": "RihaCuratedDb"
+     }
+    },
+    "GlueVersion": "4.0",
+    "Name": "02_process_trips",
+    "NumberOfWorkers": 5,
+    "Role": {
+     "Fn::GetAtt": [
+      "RihaGluePipelineGlueExecutionRole584B293F",
+      "Arn"
+     ]
+    },
+    "WorkerType": "G.1X"
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihaGlueStack/RihaGluePipeline/Job02processtrips"
+   }
+  },
+  "RihaGluePipelineJob02bcreategoldenzones1CAFE7A8": {
+   "Type": "AWS::Glue::Job",
+   "Properties": {
+    "Command": {
+     "Name": "glueetl",
+     "PythonVersion": "3",
+     "ScriptLocation": {
+      "Fn::Join": [
+       "",
+       [
+        "s3://",
+        {
+         "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+        },
+        "/scripts/02b_create_golden_zones.py"
+       ]
+      ]
+     }
+    },
+    "DefaultArguments": {
+     "--BUCKET": {
+      "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+     },
+     "--RAW_PREFIX": "raw/",
+     "--VALIDATED_PREFIX": "validated/",
+     "--PROCESSED_PREFIX": "processed/",
+     "--MASTER_PREFIX": "master/",
+     "--SCD2_PREFIX": "scd2/",
+     "--CURATED_PREFIX": "curated/curated_trips",
+     "--AUDIT_PREFIX": "audit/",
+     "--QUARANTINE_PREFIX": "quarantine/",
+     "--BACKUP_PREFIX": "backup/",
+     "--job-bookmark-option": "job-bookmark-disable",
+     "--enable-continuous-cloudwatch-log": "true",
+     "--enable-metrics": "true",
+     "--datalake-formats": "delta",
+     "--conf": "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension ",
+     "--conf1": "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog",
+     "--REDSHIFT_WORKGROUP": {
+      "Fn::ImportValue": "RedshiftWorkgroupName"
+     },
+     "--REDSHIFT_DB": {
+      "Fn::ImportValue": "RedshiftDatabaseName"
+     },
+     "--REDSHIFT_IAM_ROLE_ARN": {
+      "Fn::ImportValue": "RedshiftIamRoleArn"
+     },
+     "--GLUE_CATALOG_DB": {
+      "Ref": "RihaCuratedDb"
+     }
+    },
+    "GlueVersion": "4.0",
+    "Name": "02b_create_golden_zones",
+    "NumberOfWorkers": 5,
+    "Role": {
+     "Fn::GetAtt": [
+      "RihaGluePipelineGlueExecutionRole584B293F",
+      "Arn"
+     ]
+    },
+    "WorkerType": "G.1X"
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihaGlueStack/RihaGluePipeline/Job02bcreategoldenzones"
+   }
+  },
+  "RihaGluePipelineJob02ccreategoldenvendors3DE04D2D": {
+   "Type": "AWS::Glue::Job",
+   "Properties": {
+    "Command": {
+     "Name": "glueetl",
+     "PythonVersion": "3",
+     "ScriptLocation": {
+      "Fn::Join": [
+       "",
+       [
+        "s3://",
+        {
+         "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+        },
+        "/scripts/02c_create_golden_vendors.py"
+       ]
+      ]
+     }
+    },
+    "DefaultArguments": {
+     "--BUCKET": {
+      "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+     },
+     "--RAW_PREFIX": "raw/",
+     "--VALIDATED_PREFIX": "validated/",
+     "--PROCESSED_PREFIX": "processed/",
+     "--MASTER_PREFIX": "master/",
+     "--SCD2_PREFIX": "scd2/",
+     "--CURATED_PREFIX": "curated/curated_trips",
+     "--AUDIT_PREFIX": "audit/",
+     "--QUARANTINE_PREFIX": "quarantine/",
+     "--BACKUP_PREFIX": "backup/",
+     "--job-bookmark-option": "job-bookmark-disable",
+     "--enable-continuous-cloudwatch-log": "true",
+     "--enable-metrics": "true",
+     "--datalake-formats": "delta",
+     "--conf": "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension ",
+     "--conf1": "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog",
+     "--REDSHIFT_WORKGROUP": {
+      "Fn::ImportValue": "RedshiftWorkgroupName"
+     },
+     "--REDSHIFT_DB": {
+      "Fn::ImportValue": "RedshiftDatabaseName"
+     },
+     "--REDSHIFT_IAM_ROLE_ARN": {
+      "Fn::ImportValue": "RedshiftIamRoleArn"
+     },
+     "--GLUE_CATALOG_DB": {
+      "Ref": "RihaCuratedDb"
+     }
+    },
+    "GlueVersion": "4.0",
+    "Name": "02c_create_golden_vendors",
+    "NumberOfWorkers": 5,
+    "Role": {
+     "Fn::GetAtt": [
+      "RihaGluePipelineGlueExecutionRole584B293F",
+      "Arn"
+     ]
+    },
+    "WorkerType": "G.1X"
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihaGlueStack/RihaGluePipeline/Job02ccreategoldenvendors"
+   }
+  },
+  "RihaGluePipelineJob03scd2zones5EF10BA2": {
+   "Type": "AWS::Glue::Job",
+   "Properties": {
+    "Command": {
+     "Name": "glueetl",
+     "PythonVersion": "3",
+     "ScriptLocation": {
+      "Fn::Join": [
+       "",
+       [
+        "s3://",
+        {
+         "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+        },
+        "/scripts/03_scd2_zones.py"
+       ]
+      ]
+     }
+    },
+    "DefaultArguments": {
+     "--BUCKET": {
+      "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+     },
+     "--RAW_PREFIX": "raw/",
+     "--VALIDATED_PREFIX": "validated/",
+     "--PROCESSED_PREFIX": "processed/",
+     "--MASTER_PREFIX": "master/",
+     "--SCD2_PREFIX": "scd2/",
+     "--CURATED_PREFIX": "curated/curated_trips",
+     "--AUDIT_PREFIX": "audit/",
+     "--QUARANTINE_PREFIX": "quarantine/",
+     "--BACKUP_PREFIX": "backup/",
+     "--job-bookmark-option": "job-bookmark-disable",
+     "--enable-continuous-cloudwatch-log": "true",
+     "--enable-metrics": "true",
+     "--datalake-formats": "delta",
+     "--conf": "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension ",
+     "--conf1": "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog",
+     "--REDSHIFT_WORKGROUP": {
+      "Fn::ImportValue": "RedshiftWorkgroupName"
+     },
+     "--REDSHIFT_DB": {
+      "Fn::ImportValue": "RedshiftDatabaseName"
+     },
+     "--REDSHIFT_IAM_ROLE_ARN": {
+      "Fn::ImportValue": "RedshiftIamRoleArn"
+     },
+     "--GLUE_CATALOG_DB": {
+      "Ref": "RihaCuratedDb"
+     }
+    },
+    "GlueVersion": "4.0",
+    "Name": "03_scd2_zones",
+    "NumberOfWorkers": 5,
+    "Role": {
+     "Fn::GetAtt": [
+      "RihaGluePipelineGlueExecutionRole584B293F",
+      "Arn"
+     ]
+    },
+    "WorkerType": "G.1X"
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihaGlueStack/RihaGluePipeline/Job03scd2zones"
+   }
+  },
+  "RihaGluePipelineJob03bscd2vendorsA375418B": {
+   "Type": "AWS::Glue::Job",
+   "Properties": {
+    "Command": {
+     "Name": "glueetl",
+     "PythonVersion": "3",
+     "ScriptLocation": {
+      "Fn::Join": [
+       "",
+       [
+        "s3://",
+        {
+         "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+        },
+        "/scripts/03b_scd2_vendors.py"
+       ]
+      ]
+     }
+    },
+    "DefaultArguments": {
+     "--BUCKET": {
+      "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+     },
+     "--RAW_PREFIX": "raw/",
+     "--VALIDATED_PREFIX": "validated/",
+     "--PROCESSED_PREFIX": "processed/",
+     "--MASTER_PREFIX": "master/",
+     "--SCD2_PREFIX": "scd2/",
+     "--CURATED_PREFIX": "curated/curated_trips",
+     "--AUDIT_PREFIX": "audit/",
+     "--QUARANTINE_PREFIX": "quarantine/",
+     "--BACKUP_PREFIX": "backup/",
+     "--job-bookmark-option": "job-bookmark-disable",
+     "--enable-continuous-cloudwatch-log": "true",
+     "--enable-metrics": "true",
+     "--datalake-formats": "delta",
+     "--conf": "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension ",
+     "--conf1": "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog",
+     "--REDSHIFT_WORKGROUP": {
+      "Fn::ImportValue": "RedshiftWorkgroupName"
+     },
+     "--REDSHIFT_DB": {
+      "Fn::ImportValue": "RedshiftDatabaseName"
+     },
+     "--REDSHIFT_IAM_ROLE_ARN": {
+      "Fn::ImportValue": "RedshiftIamRoleArn"
+     },
+     "--GLUE_CATALOG_DB": {
+      "Ref": "RihaCuratedDb"
+     }
+    },
+    "GlueVersion": "4.0",
+    "Name": "03b_scd2_vendors",
+    "NumberOfWorkers": 5,
+    "Role": {
+     "Fn::GetAtt": [
+      "RihaGluePipelineGlueExecutionRole584B293F",
+      "Arn"
+     ]
+    },
+    "WorkerType": "G.1X"
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihaGlueStack/RihaGluePipeline/Job03bscd2vendors"
+   }
+  },
+  "RihaGluePipelineJob04facttripsCACAE94C": {
+   "Type": "AWS::Glue::Job",
+   "Properties": {
+    "Command": {
+     "Name": "glueetl",
+     "PythonVersion": "3",
+     "ScriptLocation": {
+      "Fn::Join": [
+       "",
+       [
+        "s3://",
+        {
+         "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+        },
+        "/scripts/04_fact_trips.py"
+       ]
+      ]
+     }
+    },
+    "DefaultArguments": {
+     "--BUCKET": {
+      "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+     },
+     "--RAW_PREFIX": "raw/",
+     "--VALIDATED_PREFIX": "validated/",
+     "--PROCESSED_PREFIX": "processed/",
+     "--MASTER_PREFIX": "master/",
+     "--SCD2_PREFIX": "scd2/",
+     "--CURATED_PREFIX": "curated/curated_trips",
+     "--AUDIT_PREFIX": "audit/",
+     "--QUARANTINE_PREFIX": "quarantine/",
+     "--BACKUP_PREFIX": "backup/",
+     "--job-bookmark-option": "job-bookmark-disable",
+     "--enable-continuous-cloudwatch-log": "true",
+     "--enable-metrics": "true",
+     "--datalake-formats": "delta",
+     "--conf": "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension ",
+     "--conf1": "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog",
+     "--REDSHIFT_WORKGROUP": {
+      "Fn::ImportValue": "RedshiftWorkgroupName"
+     },
+     "--REDSHIFT_DB": {
+      "Fn::ImportValue": "RedshiftDatabaseName"
+     },
+     "--REDSHIFT_IAM_ROLE_ARN": {
+      "Fn::ImportValue": "RedshiftIamRoleArn"
+     },
+     "--GLUE_CATALOG_DB": {
+      "Ref": "RihaCuratedDb"
+     }
+    },
+    "GlueVersion": "4.0",
+    "Name": "04_fact_trips",
+    "NumberOfWorkers": 5,
+    "Role": {
+     "Fn::GetAtt": [
+      "RihaGluePipelineGlueExecutionRole584B293F",
+      "Arn"
+     ]
+    },
+    "WorkerType": "G.1X"
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihaGlueStack/RihaGluePipeline/Job04facttrips"
+   }
+  },
+  "RihaGluePipelineJob05redshiftloadB9F050EF": {
+   "Type": "AWS::Glue::Job",
+   "Properties": {
+    "Command": {
+     "Name": "glueetl",
+     "PythonVersion": "3",
+     "ScriptLocation": {
+      "Fn::Join": [
+       "",
+       [
+        "s3://",
+        {
+         "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+        },
+        "/scripts/05_redshift_load.py"
+       ]
+      ]
+     }
+    },
+    "DefaultArguments": {
+     "--BUCKET": {
+      "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+     },
+     "--RAW_PREFIX": "raw/",
+     "--VALIDATED_PREFIX": "validated/",
+     "--PROCESSED_PREFIX": "processed/",
+     "--MASTER_PREFIX": "master/",
+     "--SCD2_PREFIX": "scd2/",
+     "--CURATED_PREFIX": "curated/curated_trips",
+     "--AUDIT_PREFIX": "audit/",
+     "--QUARANTINE_PREFIX": "quarantine/",
+     "--BACKUP_PREFIX": "backup/",
+     "--job-bookmark-option": "job-bookmark-disable",
+     "--enable-continuous-cloudwatch-log": "true",
+     "--enable-metrics": "true",
+     "--datalake-formats": "delta",
+     "--conf": "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension ",
+     "--conf1": "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog",
+     "--REDSHIFT_WORKGROUP": {
+      "Fn::ImportValue": "RedshiftWorkgroupName"
+     },
+     "--REDSHIFT_DB": {
+      "Fn::ImportValue": "RedshiftDatabaseName"
+     },
+     "--REDSHIFT_IAM_ROLE_ARN": {
+      "Fn::ImportValue": "RedshiftIamRoleArn"
+     },
+     "--GLUE_CATALOG_DB": {
+      "Ref": "RihaCuratedDb"
+     }
+    },
+    "GlueVersion": "4.0",
+    "Name": "05_redshift_load",
+    "NumberOfWorkers": 5,
+    "Role": {
+     "Fn::GetAtt": [
+      "RihaGluePipelineGlueExecutionRole584B293F",
+      "Arn"
+     ]
+    },
+    "WorkerType": "G.1X"
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihaGlueStack/RihaGluePipeline/Job05redshiftload"
+   }
+  },
+  "RihaGluePipelineJob06governancemetricsF0926E1C": {
+   "Type": "AWS::Glue::Job",
+   "Properties": {
+    "Command": {
+     "Name": "glueetl",
+     "PythonVersion": "3",
+     "ScriptLocation": {
+      "Fn::Join": [
+       "",
+       [
+        "s3://",
+        {
+         "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+        },
+        "/scripts/06_governance_metrics.py"
+       ]
+      ]
+     }
+    },
+    "DefaultArguments": {
+     "--BUCKET": {
+      "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+     },
+     "--RAW_PREFIX": "raw/",
+     "--VALIDATED_PREFIX": "validated/",
+     "--PROCESSED_PREFIX": "processed/",
+     "--MASTER_PREFIX": "master/",
+     "--SCD2_PREFIX": "scd2/",
+     "--CURATED_PREFIX": "curated/curated_trips",
+     "--AUDIT_PREFIX": "audit/",
+     "--QUARANTINE_PREFIX": "quarantine/",
+     "--BACKUP_PREFIX": "backup/",
+     "--job-bookmark-option": "job-bookmark-disable",
+     "--enable-continuous-cloudwatch-log": "true",
+     "--enable-metrics": "true",
+     "--datalake-formats": "delta",
+     "--conf": "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension ",
+     "--conf1": "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog",
+     "--REDSHIFT_WORKGROUP": {
+      "Fn::ImportValue": "RedshiftWorkgroupName"
+     },
+     "--REDSHIFT_DB": {
+      "Fn::ImportValue": "RedshiftDatabaseName"
+     },
+     "--REDSHIFT_IAM_ROLE_ARN": {
+      "Fn::ImportValue": "RedshiftIamRoleArn"
+     },
+     "--GLUE_CATALOG_DB": {
+      "Ref": "RihaCuratedDb"
+     }
+    },
+    "GlueVersion": "4.0",
+    "Name": "06_governance_metrics",
+    "NumberOfWorkers": 5,
+    "Role": {
+     "Fn::GetAtt": [
+      "RihaGluePipelineGlueExecutionRole584B293F",
+      "Arn"
+     ]
+    },
+    "WorkerType": "G.1X"
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihaGlueStack/RihaGluePipeline/Job06governancemetrics"
+   }
+  },
+  "RihaGluePipelineCuratedCrawler69595D57": {
+   "Type": "AWS::Glue::Crawler",
+   "Properties": {
+    "DatabaseName": {
+     "Ref": "RihaCuratedDb"
+    },
+    "Name": "rihaoubt-curated-crawler",
+    "RecrawlPolicy": {
+     "RecrawlBehavior": "CRAWL_EVERYTHING"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "RihaGluePipelineGlueExecutionRole584B293F",
+      "Arn"
+     ]
+    },
+    "SchemaChangePolicy": {
+     "DeleteBehavior": "DEPRECATE_IN_DATABASE",
+     "UpdateBehavior": "UPDATE_IN_DATABASE"
+    },
+    "TablePrefix": "curated_",
+    "Targets": {
+     "S3Targets": [
+      {
+       "Path": {
+        "Fn::Join": [
+         "",
+         [
+          "s3://",
+          {
+           "Fn::ImportValue": "RihaStorageStack:ExportsOutputRefS3DataLakeE27C73864B4EADC5"
+          },
+          "/curated/"
+         ]
+        ]
+       }
+      }
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihaGlueStack/RihaGluePipeline/CuratedCrawler"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/yXJSw7CIBSF4bV0Tq+2mugcR44augBzwVvFUkh4hDSEvZu2o+8/OT10tzucG8yhVe+5NVpCGSOqmQkKLnlFDHN4lY9JBIVP9oERJQZifLJPJze4x2zIV6ZxgSKc2c/dwRmt1m0eVWtlwxq/zp4u0F2hb35B69YnG/VCIA7/rXu7GJYAAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "RihaGlueStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

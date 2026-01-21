@@ -1,0 +1,20 @@
+{
+  "version": "39.0.0",
+  "files": {
+    "f03e90a568367552886afb602e73d3c3f150080d4bd00e0bfb49386d40517ab9": {
+      "source": {
+        "path": "RihaRedshiftServerlessStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-us-east-1": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1",
+          "objectKey": "f03e90a568367552886afb602e73d3c3f150080d4bd00e0bfb49386d40517ab9.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-us-east-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

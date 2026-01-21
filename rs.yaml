@@ -1,0 +1,85 @@
+Resources:
+  RedshiftServerlessRoleD124E238:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: redshift.amazonaws.com
+        Version: "2012-10-17"
+      Description: IAM role for Redshift Serverless access to S3 and Glue
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/AmazonS3ReadOnlyAccess
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/AWSGlueConsoleFullAccess
+    Metadata:
+      aws:cdk:path: RihaRedshiftServerlessStack/RedshiftServerlessRole/Resource
+  RedshiftServerlessRoleDefaultPolicyE3B556A2:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - kms:Decrypt
+              - kms:GenerateDataKey*
+              - kms:DescribeKey
+            Effect: Allow
+            Resource:
+              Fn::ImportValue: RihaDataLakeKmsKeyArn:KmsKeyArn
+        Version: "2012-10-17"
+      PolicyName: RedshiftServerlessRoleDefaultPolicyE3B556A2
+      Roles:
+        - Ref: RedshiftServerlessRoleD124E238
+    Metadata:
+      aws:cdk:path: RihaRedshiftServerlessStack/RedshiftServerlessRole/DefaultPolicy/Resource
+  RedshiftNamespace:
+    Type: AWS::RedshiftServerless::Namespace
+    Properties:
+      DbName: riharedshiftserverlessstack_dev
+      IamRoles:
+        - Fn::GetAtt:
+            - RedshiftServerlessRoleD124E238
+            - Arn
+      KmsKeyId:
+        Fn::ImportValue: RihaDataLakeKmsKeyArn:KmsKeyArn
+      ManageAdminPassword: true
+      NamespaceName: riharedshiftserverlessstack-namespace
+    Metadata:
+      aws:cdk:path: RihaRedshiftServerlessStack/RedshiftNamespace
+  RedshiftWorkgroup:
+    Type: AWS::RedshiftServerless::Workgroup
+    Properties:
+      BaseCapacity: 8
+      NamespaceName: riharedshiftserverlessstack-namespace
+      PubliclyAccessible: false
+      SecurityGroupIds:
+        - Fn::ImportValue: RihanaNetworkStack:ExportsOutputFnGetAttRedshiftSG19E35DFCGroupId3712FAAE
+      SubnetIds:
+        - Fn::ImportValue: RihanaNetworkStack:ExportsOutputRefRihaVpcprivateSubnet1Subnet7053DAD33EC2B729
+        - Fn::ImportValue: RihanaNetworkStack:ExportsOutputRefRihaVpcprivateSubnet2SubnetBBA59AD86B1C20D4
+      WorkgroupName: riharedshiftserverlessstack-redshift-wg
+    DependsOn:
+      - RedshiftNamespace
+    Metadata:
+      aws:cdk:path: RihaRedshiftServerlessStack/RedshiftWorkgroup
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Analytics: v2:deflate64:H4sIAAAAAAAA/yWLwQ6CMBAFv4V7WUUOePduCB48mloWWSkt2S0a0vTfRTjNvEzeCYrqDMdMfyU37ZBbekK8BW0G1aD4mQ2qtT0i6RFi4y2qS+c21t6SWf5zt6QYW+mpC4L8QbYoAnHNVz2iTNps17vn4cV+nlJKql5C792hhKKEKnsLUc6zCzQiNDt/MzvOzKAAAAA=
+    Metadata:
+      aws:cdk:path: RihaRedshiftServerlessStack/CDKMetadata/Default
+Parameters:
+  BootstrapVersion:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /cdk-bootstrap/hnb659fds/version
+    Description: Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]
+
